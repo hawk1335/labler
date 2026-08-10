@@ -63,6 +63,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -226,13 +227,21 @@ fun EditorScreen(
                     .imePadding()
                     .verticalScroll(rememberScrollState())
             ) {
+            // The size doubles as the entry point to the label dialog (name + size). The title in the
+            // top bar opens the same dialog, but a plain title does not look tappable, so the size
+            // is set in the accent color to make the option visible at all.
             Text(
                 stringResource(R.string.template_size, t.spec.tapeWidthMm, t.spec.lengthMm),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .align(Alignment.End)
-                    .padding(top = 4.dp),
+                    .padding(top = 2.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable(onClickLabel = stringResource(R.string.dialog_edit_title)) {
+                        showMetaDialog = true
+                    }
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
             )
 
             GroupLabel(stringResource(R.string.group_add))
