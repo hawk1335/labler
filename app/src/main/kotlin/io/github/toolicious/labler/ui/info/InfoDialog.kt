@@ -68,11 +68,15 @@ import kotlinx.coroutines.withContext
 fun InfoDialog(onDismiss: () -> Unit) {
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
+    // Full version including "-devNN" for dev builds (a release stays "1.1.0"); a dev build also
+    // shows the exact versionCode so it is unambiguous which build is installed.
+    @Suppress("DEPRECATION")
     val version = remember {
         runCatching {
-            @Suppress("DEPRECATION")
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName
-        }.getOrNull()?.substringBefore("-") ?: "?"
+            val info = context.packageManager.getPackageInfo(context.packageName, 0)
+            val name = info.versionName ?: "?"
+            if (name.contains("-dev")) "$name (${info.versionCode})" else name
+        }.getOrNull() ?: "?"
     }
     val muted = MaterialTheme.colorScheme.onSurfaceVariant
     val cardColor = MaterialTheme.colorScheme.surfaceContainerLow
