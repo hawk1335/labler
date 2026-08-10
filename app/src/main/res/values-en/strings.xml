@@ -162,6 +162,9 @@
     <string name="settings_experimental">Experimental</string>
     <string name="settings_experimental_hint">Experimental printer commands, not verified on the P15. Only with a connected printer; ignore if unsure.</string>
     <string name="exp_learn_gap">Calibrate label gap</string>
+    <string name="exp_density_value">Print density: %1$s</string>
+    <string name="exp_density_off">off</string>
+    <string name="exp_density_hint">Tests whether the P15 accepts the 0x1F density command. 0 = off (standard printing unchanged), 1 to 15 = darker. Takes effect on the next print.</string>
     <string name="settings_about">About</string>
     <string name="about_text">LaBLEr %1$s\n\nIndependent FOSS app for the P15 label printer over Bluetooth LE. The protocol was reverse-engineered from BleWebler, a web version for Chrome browsers that runs without installation. No code was taken.</string>
     <string name="scan_title">Find printer</string>

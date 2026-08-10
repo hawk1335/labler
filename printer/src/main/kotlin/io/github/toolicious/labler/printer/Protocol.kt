@@ -50,6 +50,16 @@ object Protocol {
     // Experimental command (not yet verified on the P15)
     val LEARN_GAP = byteArrayOf(0x10, 0xFF.toByte(), 0x03)
 
+    /**
+     * Experimental darkness command from the newer "0x1F" command family: 1F 70 01 n (n = 1..15).
+     * Not verified on the P15. Only emitted when the user enables it; besides setting the darkness
+     * it also probes whether the device reacts to a 0x1F command at all.
+     */
+    fun density(level: Int): ByteArray {
+        require(level in 1..15) { "Density must be 1..15, was $level" }
+        return byteArrayOf(0x1F, 0x70, 0x01, level.toByte())
+    }
+
     // Transfer parameters
     const val CHUNK_SIZE = 96
     const val CHUNK_DELAY_MS = 30L

@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -40,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +55,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.toolicious.labler.R
 import io.github.toolicious.labler.ble.BlePermissions
 import io.github.toolicious.labler.ble.PrinterState
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -211,6 +214,31 @@ fun SettingsScreen(
                 Spacer(Modifier.height(4.dp))
                 Text(it, style = MaterialTheme.typography.bodySmall)
             }
+
+            Spacer(Modifier.height(16.dp))
+            val savedDensity by vm.printDensity.collectAsState()
+            // Local slider position; persisted only when the drag ends, so DataStore is not
+            // hammered on every tick. remember(savedDensity) re-syncs if it changes elsewhere.
+            var densitySlider by remember(savedDensity) { mutableFloatStateOf(savedDensity.toFloat()) }
+            val densityLevel = densitySlider.roundToInt()
+            val densityText =
+                if (densityLevel == 0) stringResource(R.string.exp_density_off) else densityLevel.toString()
+            Text(
+                stringResource(R.string.exp_density_value, densityText),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Slider(
+                value = densitySlider,
+                onValueChange = { densitySlider = it },
+                onValueChangeFinished = { vm.setPrintDensity(densitySlider.roundToInt()) },
+                valueRange = 0f..15f,
+                steps = 14,
+            )
+            Text(
+                stringResource(R.string.exp_density_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
 
             Spacer(Modifier.height(24.dp))
         }

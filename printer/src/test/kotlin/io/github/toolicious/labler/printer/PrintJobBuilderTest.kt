@@ -3,6 +3,7 @@ package io.github.toolicious.labler.printer
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class PrintJobBuilderTest {
 
@@ -47,5 +48,28 @@ class PrintJobBuilderTest {
     fun `payload size is 12 bytes per column`() {
         val job = PrintJobBuilder.buildJob(MonoImage.blank(320), MediaType.DIE_CUT)
         assertEquals(3 + 15 + 4 + 4 + 2 + 2 + 320 * 12 + 12, job.size)
+    }
+
+    @Test
+    fun `default job has no density command (byte-identical whether density is omitted or null)`() {
+        val omitted = PrintJobBuilder.buildJob(MonoImage.blank(8), MediaType.DIE_CUT)
+        val explicitNull = PrintJobBuilder.buildJob(MonoImage.blank(8), MediaType.DIE_CUT, null)
+        assertEquals(138, omitted.size)
+        assertContentEquals(omitted, explicitNull)
+    }
+
+    @Test
+    fun `density command is inserted right after init and adds four bytes`() {
+        val job = PrintJobBuilder.buildJob(MonoImage.blank(8), MediaType.DIE_CUT, density = 8)
+        // Init (3) then the density command 1F 70 01 08 (4), before the header padding.
+        assertContentEquals(hex(0x10, 0xFF, 0x40, 0x1F, 0x70, 0x01, 0x08), job.copyOfRange(0, 7))
+        assertEquals(138 + 4, job.size)
+    }
+
+    @Test
+    fun `density level must be within 1 to 15`() {
+        assertFailsWith<IllegalArgumentException> { Protocol.density(0) }
+        assertFailsWith<IllegalArgumentException> { Protocol.density(16) }
+        assertContentEquals(hex(0x1F, 0x70, 0x01, 0x0F), Protocol.density(15))
     }
 }

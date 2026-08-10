@@ -28,6 +28,10 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     val savedPrinter = container.settings.savedPrinter
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
+    /** Experimental 0x1F print density: 0 = off, 1..15 = darkness. Applied on the next print. */
+    val printDensity = container.settings.printDensity
+        .stateIn(viewModelScope, SharingStarted.Eagerly, 0)
+
     private val _scanning = MutableStateFlow(false)
     val scanning = _scanning.asStateFlow()
 
@@ -109,6 +113,11 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
                 onFailure = { "Error: ${it.message}" },
             )
         }
+    }
+
+    /** Experimental 0x1F print density (0 = off, 1..15 = darkness). Takes effect on the next print. */
+    fun setPrintDensity(level: Int) {
+        viewModelScope.launch { container.settings.savePrintDensity(level) }
     }
 
     override fun onCleared() {

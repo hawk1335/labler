@@ -22,6 +22,7 @@ class SettingsRepository(private val context: Context) {
         val DEFAULT_LENGTH = intPreferencesKey("default_length_mm")
         val DEFAULT_DIE_CUT = booleanPreferencesKey("default_die_cut")
         val LAST_SYMBOL_TAB = intPreferencesKey("last_symbol_tab")
+        val PRINT_DENSITY = intPreferencesKey("print_density")
     }
 
     val savedPrinter: Flow<SavedPrinter?> = context.dataStore.data.map { prefs ->
@@ -60,5 +61,15 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun saveLastSymbolTab(tab: Int) {
         context.dataStore.edit { it[Keys.LAST_SYMBOL_TAB] = tab }
+    }
+
+    /**
+     * Experimental 0x1F print density: 0 = off (default protocol, print path unchanged),
+     * 1..15 = darkness level sent as the 1F 70 01 n command. Not verified on the P15.
+     */
+    val printDensity: Flow<Int> = context.dataStore.data.map { it[Keys.PRINT_DENSITY] ?: 0 }
+
+    suspend fun savePrintDensity(level: Int) {
+        context.dataStore.edit { it[Keys.PRINT_DENSITY] = level.coerceIn(0, 15) }
     }
 }

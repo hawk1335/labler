@@ -192,7 +192,9 @@ class PrinterManager(
                 ?: error(context.getString(R.string.err_not_connected))
             val conn = connection ?: error(context.getString(R.string.err_not_connected))
             try {
-                val payloads = images.map { PrintJobBuilder.buildJob(it, media) }
+                // Experimental 0x1F darkness: 0 (off) keeps the default print path byte-for-byte.
+                val density = settings.printDensity.first().takeIf { it in 1..15 }
+                val payloads = images.map { PrintJobBuilder.buildJob(it, media, density) }
                 _state.value = PrinterState.Printing(0f, 1, payloads.size)
                 gattExclusive.withLock {
                     PrintJobSender.sendAll(conn, payloads) { progress, jobIndex ->

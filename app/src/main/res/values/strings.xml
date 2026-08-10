@@ -162,6 +162,9 @@
     <string name="settings_experimental">Experimentell</string>
     <string name="settings_experimental_hint">Experimentelle Druckerbefehle, am P15 nicht verifiziert. Nur bei verbundenem Drucker; im Zweifel einfach ignorieren.</string>
     <string name="exp_learn_gap">Banderkennung anlernen</string>
+    <string name="exp_density_value">Druckdichte: %1$s</string>
+    <string name="exp_density_off">aus</string>
+    <string name="exp_density_hint">Testet, ob der P15 den 0x1F-Dichtebefehl annimmt. 0 = aus (Standarddruck unverändert), 1 bis 15 = dunkler. Wirkt beim nächsten Druck.</string>
     <string name="settings_about">Über</string>
     <string name="about_text">LaBLEr %1$s\n\nEigenständige FOSS-App für den P15-Labeldrucker über Bluetooth LE. Das Protokoll wurde aus BleWebler reverse-engineert, einer Web-Version für Chrome-Browser ohne Installation. Kein Code übernommen.</string>
     <string name="about_link" translatable="false">https://github.com/josb25/BleWebler</string>

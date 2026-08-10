@@ -11,11 +11,18 @@ enum class MediaType { DIE_CUT, CONTINUOUS }
  */
 object PrintJobBuilder {
 
-    fun buildJob(image: MonoImage, media: MediaType): ByteArray {
+    /**
+     * @param density experimental 0x1F darkness level (1..15) or null for the default protocol.
+     *   When null the output is byte-identical to a job without density (default print path).
+     */
+    fun buildJob(image: MonoImage, media: MediaType, density: Int? = null): ByteArray {
         val payload = ColumnPacker.packColumns(image)
-        val out = ByteArrayOutputStream(payload.size + 48)
+        val out = ByteArrayOutputStream(payload.size + 52)
 
         out.write(Protocol.INIT)
+        // Experimental darkness, right after init (init may reset printer state) and before the
+        // raster header. Left out entirely for the default path so the golden byte stream is unchanged.
+        if (density != null) out.write(Protocol.density(density))
         repeat(Protocol.HEADER_PADDING) { out.write(0) }
         out.write(Protocol.PRINT_START)
         out.write(Protocol.RASTER_GS_V0)
