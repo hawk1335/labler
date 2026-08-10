@@ -24,3 +24,10 @@ Design/
 *.jks
 keystore.properties
 /keystore/
+
+# JVM crash dumps from Gradle daemon crashes (contain local paths)
+hs_err_pid*.log
+replay_pid*.log
+
+# Staging area for files to be deleted by hand later
+_trash/
