@@ -62,7 +62,8 @@
     <string name="add_symbol">Symbol</string>
     <string name="add_frame">Ramka</string>
     <string name="element_frame">Ramka</string>
-    <string name="editor_hint">Dotknij elementu na etykiecie lub dodaj nowy powyżej. Zaznaczone elementy można przeciągać; uchwyt w prawym dolnym rogu skaluje.</string>
+    <string name="editor_hint">Dodawaj elementy do etykiety, zaznaczaj je bezpośrednio lub z listy, przesuwaj i skaluj uchwytem w rogu.</string>
+    <string name="editor_hint_free_move">Dotknij dwukrotnie i przytrzymaj drugie dotknięcie, aby przesuwać swobodnie, bez przyciągania.</string>
     <string name="group_format">Format</string>
     <string name="group_align">Wyrównanie</string>
     <string name="group_variables">Zmienne</string>

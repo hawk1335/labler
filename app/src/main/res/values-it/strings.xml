@@ -62,7 +62,8 @@
     <string name="add_symbol">Simbolo</string>
     <string name="add_frame">Cornice</string>
     <string name="element_frame">Cornice</string>
-    <string name="editor_hint">Tocca un elemento sull\'etichetta o aggiungine uno sopra. Gli elementi selezionati si possono trascinare; la maniglia in basso a destra ridimensiona.</string>
+    <string name="editor_hint">Aggiungi elementi all\'etichetta, selezionali direttamente o dall\'elenco, spostali e ridimensionali dall\'angolo.</string>
+    <string name="editor_hint_free_move">Tocca due volte e tieni premuto il secondo tocco per spostare liberamente, senza aggancio.</string>
     <string name="group_format">Formato</string>
     <string name="group_align">Allineamento</string>
     <string name="group_variables">Variabili</string>

@@ -67,6 +67,7 @@
     <string name="add_frame">Frame</string>
     <string name="element_frame">Frame</string>
     <string name="editor_hint">Add elements to the label, select directly or from the list, move them, and resize from the corner.</string>
+    <string name="editor_hint_free_move">Double tap and keep the second tap held to move freely, without snapping.</string>
     <string name="group_format">Format</string>
     <string name="group_align">Alignment</string>
     <string name="group_variables">Variables</string>

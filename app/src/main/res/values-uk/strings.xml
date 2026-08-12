@@ -62,7 +62,8 @@
     <string name="add_symbol">Символ</string>
     <string name="add_frame">Рамка</string>
     <string name="element_frame">Рамка</string>
-    <string name="editor_hint">Торкніться елемента на етикетці або додайте новий зверху. Вибрані елементи можна перетягувати; маркер унизу праворуч змінює розмір.</string>
+    <string name="editor_hint">Додавайте елементи на етикетку, вибирайте їх прямо на ній або зі списку, переміщуйте та змінюйте розмір маркером у куті.</string>
+    <string name="editor_hint_free_move">Двічі торкніться й утримуйте другий дотик, щоб переміщувати вільно, без прив\'язки.</string>
     <string name="group_format">Формат</string>
     <string name="group_align">Вирівнювання</string>
     <string name="group_variables">Змінні</string>

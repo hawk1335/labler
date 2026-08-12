@@ -62,7 +62,8 @@
     <string name="add_symbol">Símbolo</string>
     <string name="add_frame">Marco</string>
     <string name="element_frame">Marco</string>
-    <string name="editor_hint">Toca un elemento en la etiqueta o añade uno arriba. Los elementos seleccionados se pueden arrastrar; el tirador de abajo a la derecha cambia el tamaño.</string>
+    <string name="editor_hint">Añade elementos a la etiqueta, selecciónalos directamente o desde la lista, muévelos y cambia su tamaño desde la esquina.</string>
+    <string name="editor_hint_free_move">Toca dos veces y mantén pulsado el segundo toque para mover con libertad, sin ajuste automático.</string>
     <string name="group_format">Formato</string>
     <string name="group_align">Alineación</string>
     <string name="group_variables">Variables</string>

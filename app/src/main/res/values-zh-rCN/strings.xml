@@ -62,7 +62,8 @@
     <string name="add_symbol">符号</string>
     <string name="add_frame">边框</string>
     <string name="element_frame">边框</string>
-    <string name="editor_hint">点按标签上的元素，或从上方添加。选中的元素可拖动；右下角的手柄用于缩放。</string>
+    <string name="editor_hint">在标签上添加元素，直接点按或从列表中选择，拖动移动，用角上的手柄缩放。</string>
+    <string name="editor_hint_free_move">双击并按住第二次点按后拖动，即可自由移动，不会吸附。</string>
     <string name="group_format">格式</string>
     <string name="group_align">对齐</string>
     <string name="group_variables">变量</string>

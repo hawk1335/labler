@@ -316,7 +316,9 @@ fun EditorScreen(
                         onDelete = vm::deleteSelected
                     )
                 } ?: Text(
-                    stringResource(R.string.editor_hint),
+                    // Blank line between the two hints, so the gesture stands out as its own note.
+                    stringResource(R.string.editor_hint) + "\n\n" +
+                        stringResource(R.string.editor_hint_free_move),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

@@ -1,8 +1,11 @@
 package io.github.toolicious.labler.ui.editor
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitTouchSlopOrCancellation
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +24,11 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.input.pointer.AwaitPointerEventScope
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import io.github.toolicious.labler.model.FrameElement
@@ -32,6 +39,7 @@ import io.github.toolicious.labler.model.LabelTextAlign
 import io.github.toolicious.labler.model.TextElement
 import io.github.toolicious.labler.printer.MediaType
 import io.github.toolicious.labler.render.LabelRenderer
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.min
@@ -53,7 +61,8 @@ private fun elementBounds(el: LabelElement): Rect {
 /**
  * Static label area (no zoom/pan): the label is fitted to the width and the
  * border is dark gray. Tapping selects an element, dragging moves it, and the
- * round handle at the bottom right scales it. Element coordinates are label pixels.
+ * round handle at the bottom right scales it. Dragging out of a double tap moves
+ * without snapping. Element coordinates are label pixels.
  */
 @Composable
 fun EditorCanvas(
@@ -62,7 +71,7 @@ fun EditorCanvas(
     selectedId: String?,
     guides: SnapGuides,
     onSelect: (String?) -> Unit,
-    onDragStart: (String) -> Unit,
+    onDragStart: (String, Boolean) -> Unit,
     onDragBy: (Offset) -> Unit,
     onDragEnd: () -> Unit,
     onResizeStart: (String) -> Unit,
@@ -71,6 +80,9 @@ fun EditorCanvas(
     modifier: Modifier = Modifier,
 ) {
     var boxSize by remember { mutableStateOf(IntSize.Zero) }
+    // True while a drag that came out of a double tap is running, so the selection
+    // frame can show that this move ignores the snap lines.
+    var snapFreeDrag by remember { mutableStateOf(false) }
 
     val labelW = spec.lengthPx.toFloat()
     val labelH = LabelSpec.PRINT_HEIGHT_PX.toFloat()
@@ -102,8 +114,8 @@ fun EditorCanvas(
             .onSizeChanged { boxSize = it }
             .pointerInput(Unit) {
                 var mode = 0 // 0 = nothing, 1 = move, 2 = scale
-                detectDragGestures(
-                    onDragStart = { pos ->
+                detectDragGesturesWithDoubleTap(
+                    onStart = { pos, snapFree ->
                         val sc = totalState.value
                         val lp = (pos - tlState.value) / sc
                         val sel = elementsState.value.find { it.id == selectedIdState.value }
@@ -122,13 +134,15 @@ fun EditorCanvas(
                             // moved. (Tapping still selects the topmost element.)
                             sel != null && hitTest(lp, sel) -> {
                                 mode = 1
-                                onDragStart(sel.id)
+                                snapFreeDrag = snapFree
+                                onDragStart(sel.id, snapFree)
                             }
                             else -> {
                                 val hit = elementsState.value.lastOrNull { hitTest(lp, it) }
                                 if (hit != null) {
                                     mode = 1
-                                    onDragStart(hit.id)
+                                    snapFreeDrag = snapFree
+                                    onDragStart(hit.id, snapFree)
                                 } else {
                                     mode = 0
                                     onSelect(null)
@@ -136,21 +150,17 @@ fun EditorCanvas(
                             }
                         }
                     },
-                    onDrag = { change, amount ->
-                        change.consume()
+                    onDrag = { amount ->
                         val d = amount / totalState.value
                         when (mode) {
                             1 -> onDragBy(d)
                             2 -> onResizeBy(d)
                         }
                     },
-                    onDragEnd = {
+                    onEnd = {
                         if (mode == 1) onDragEnd() else if (mode == 2) onResizeEnd()
                         mode = 0
-                    },
-                    onDragCancel = {
-                        if (mode == 1) onDragEnd() else if (mode == 2) onResizeEnd()
-                        mode = 0
+                        snapFreeDrag = false
                     },
                 )
             }
@@ -216,12 +226,14 @@ fun EditorCanvas(
                 )
             }
 
-            // Selection frame and scale handle
+            // Selection frame and scale handle. While dragging without snapping, the frame
+            // switches to the guide color, because no guide lines show up in that mode.
             val sel = elements.find { it.id == selectedId }
             if (sel != null) {
+                val frameColor = if (snapFreeDrag) guideColor else selectionColor
                 val b = elementBounds(sel)
                 drawRect(
-                    color = selectionColor,
+                    color = frameColor,
                     topLeft = toScreen(b.left, b.top),
                     size = Size(b.width * total, b.height * total),
                     style = Stroke(width = 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 6f))),
@@ -242,11 +254,66 @@ fun EditorCanvas(
                 }
                 val handle = toScreen(b.right, b.bottom)
                 drawCircle(Color.White, radius = 13f, center = handle)
-                drawCircle(selectionColor, radius = 13f, center = handle, style = Stroke(width = 2.5f))
-                drawCircle(selectionColor, radius = 4.5f, center = handle)
+                drawCircle(frameColor, radius = 13f, center = handle, style = Stroke(width = 2.5f))
+                drawCircle(frameColor, radius = 4.5f, center = handle)
             }
         }
     }
+}
+
+/**
+ * Drag detector that also recognises "double tap, then drag": when the finger goes down again
+ * within the double tap timeout, the drag is reported with snapFree = true. The tap itself stays
+ * with the separate tap detector, which selects the element, so this one only has to notice that
+ * a second down followed. [onDrag] receives the raw screen delta, like detectDragGestures does.
+ */
+private suspend fun PointerInputScope.detectDragGesturesWithDoubleTap(
+    onStart: (Offset, Boolean) -> Unit,
+    onDrag: (Offset) -> Unit,
+    onEnd: () -> Unit,
+) = awaitEachGesture {
+    // The tap detector sits further in and consumes the down, hence requireUnconsumed = false.
+    val first = awaitFirstDown(requireUnconsumed = false)
+    var start = first
+    var snapFree = false
+    var overSlop = Offset.Zero
+    var slop = awaitTouchSlopOrCancellation(first.id) { change, over ->
+        change.consume()
+        overSlop = over
+    }
+    if (slop == null) {
+        // The finger came up before the touch slop, so this may be the first tap of a double tap.
+        val second = awaitSecondDown(first) ?: return@awaitEachGesture
+        snapFree = true
+        start = second
+        slop = awaitTouchSlopOrCancellation(second.id) { change, over ->
+            change.consume()
+            overSlop = over
+        }
+    }
+    // A plain double tap without any movement: nothing to drag.
+    val dragStart = slop ?: return@awaitEachGesture
+
+    onStart(start.position, snapFree)
+    if (overSlop != Offset.Zero) onDrag(overSlop)
+    drag(dragStart.id) { change ->
+        onDrag(change.positionChange())
+        change.consume()
+    }
+    // A cancelled drag ends like a finished one: the move is already applied element by element.
+    onEnd()
+}
+
+/** Waits a moment for the second down of a double tap. */
+private suspend fun AwaitPointerEventScope.awaitSecondDown(
+    first: PointerInputChange,
+): PointerInputChange? = withTimeoutOrNull(viewConfiguration.doubleTapTimeoutMillis) {
+    val minUptime = first.uptimeMillis + viewConfiguration.doubleTapMinTimeMillis
+    var change: PointerInputChange
+    do {
+        change = awaitFirstDown(requireUnconsumed = false)
+    } while (change.uptimeMillis < minUptime)
+    change
 }
 
 private fun hitTest(lp: Offset, el: LabelElement): Boolean {

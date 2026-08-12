@@ -67,6 +67,7 @@
     <string name="add_frame">Rahmen</string>
     <string name="element_frame">Rahmen</string>
     <string name="editor_hint">Elemente auf dem Label hinzufügen, direkt oder über die Liste auswählen, verschieben und über die Ecke skalieren.</string>
+    <string name="editor_hint_free_move">Doppelt tippen und den zweiten Tipp gedrückt halten bewegt frei, ohne Einrasten.</string>
     <string name="group_format">Format</string>
     <string name="group_align">Ausrichtung</string>
     <string name="group_variables">Variablen</string>

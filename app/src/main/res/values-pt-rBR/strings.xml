@@ -62,7 +62,8 @@
     <string name="add_symbol">Símbolo</string>
     <string name="add_frame">Moldura</string>
     <string name="element_frame">Moldura</string>
-    <string name="editor_hint">Toque em um elemento na etiqueta ou adicione um acima. Os elementos selecionados podem ser arrastados; a alça no canto inferior direito redimensiona.</string>
+    <string name="editor_hint">Adicione elementos à etiqueta, selecione-os diretamente ou pela lista, mova-os e redimensione pela alça no canto.</string>
+    <string name="editor_hint_free_move">Toque duas vezes e mantenha o segundo toque pressionado para mover livremente, sem encaixe.</string>
     <string name="group_format">Formato</string>
     <string name="group_align">Alinhamento</string>
     <string name="group_variables">Variáveis</string>

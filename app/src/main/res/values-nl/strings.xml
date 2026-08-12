@@ -62,7 +62,8 @@
     <string name="add_symbol">Symbool</string>
     <string name="add_frame">Kader</string>
     <string name="element_frame">Kader</string>
-    <string name="editor_hint">Tik op een element op het label of voeg er bovenaan een toe. Geselecteerde elementen kun je slepen; de greep rechtsonder schaalt.</string>
+    <string name="editor_hint">Voeg elementen toe aan het label, selecteer ze direct of via de lijst, verplaats ze en schaal ze met de greep in de hoek.</string>
+    <string name="editor_hint_free_move">Tik twee keer en houd de tweede tik ingedrukt om vrij te verplaatsen, zonder magnetisch uitlijnen.</string>
     <string name="group_format">Opmaak</string>
     <string name="group_align">Uitlijning</string>
     <string name="group_variables">Variabelen</string>

@@ -62,7 +62,8 @@
     <string name="add_symbol">記号</string>
     <string name="add_frame">枠</string>
     <string name="element_frame">枠</string>
-    <string name="editor_hint">ラベル上の要素をタップするか、上から追加します。選択した要素はドラッグで移動でき、右下のハンドルでサイズを変更します。</string>
+    <string name="editor_hint">ラベルに要素を追加し、直接またはリストから選択して、ドラッグで移動、角のハンドルでサイズを変更します。</string>
+    <string name="editor_hint_free_move">ダブルタップして 2 回目のタップを押したまま動かすと、スナップなしで自由に移動できます。</string>
     <string name="group_format">書式</string>
     <string name="group_align">配置</string>
     <string name="group_variables">変数</string>

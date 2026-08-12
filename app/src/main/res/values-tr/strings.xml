@@ -62,7 +62,8 @@
     <string name="add_symbol">Simge</string>
     <string name="add_frame">Çerçeve</string>
     <string name="element_frame">Çerçeve</string>
-    <string name="editor_hint">Etiketteki bir öğeye dokun veya yukarıdan yeni bir öğe ekle. Seçili öğeler sürüklenebilir; sağ alttaki tutamaç boyutlandırır.</string>
+    <string name="editor_hint">Etikete öğe ekle, doğrudan veya listeden seç, taşı ve köşedeki tutamaçla boyutlandır.</string>
+    <string name="editor_hint_free_move">İki kez dokunup ikinci dokunuşu basılı tutarak sürüklersen öğe yapışma olmadan serbestçe hareket eder.</string>
     <string name="group_format">Biçim</string>
     <string name="group_align">Hizalama</string>
     <string name="group_variables">Değişkenler</string>

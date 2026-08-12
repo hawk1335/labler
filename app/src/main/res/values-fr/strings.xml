@@ -62,7 +62,8 @@
     <string name="add_symbol">Symbole</string>
     <string name="add_frame">Cadre</string>
     <string name="element_frame">Cadre</string>
-    <string name="editor_hint">Touchez un élément sur l\'étiquette ou ajoutez-en un ci-dessus. Les éléments sélectionnés peuvent être déplacés ; la poignée en bas à droite redimensionne.</string>
+    <string name="editor_hint">Ajoutez des éléments à l\'étiquette, sélectionnez-les directement ou dans la liste, déplacez-les et redimensionnez-les par le coin.</string>
+    <string name="editor_hint_free_move">Appuyez deux fois et maintenez le second appui pour déplacer librement, sans magnétisme.</string>
     <string name="group_format">Format</string>
     <string name="group_align">Alignement</string>
     <string name="group_variables">Variables</string>

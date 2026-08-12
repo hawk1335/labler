@@ -194,17 +194,26 @@ class EditorViewModel(app: Application, private val templateId: String) : Androi
 
     private var dragId: String? = null
     private var dragRaw: Offset? = null
+    // Set for a drag started out of a double tap: that one moves freely, without snapping.
+    private var dragSnapFree = false
     // Snap lines from the other elements, cached at drag start (they do not move during the drag).
     private var dragXTargets: List<SnapTarget> = emptyList()
     private var dragYTargets: List<SnapTarget> = emptyList()
 
-    fun beginDrag(id: String) {
+    fun beginDrag(id: String, snapFree: Boolean) {
         val t = _template.value ?: return
         val el = t.elements.find { it.id == id } ?: return
         _selectedId.value = id
         pushHistory(null)
         dragId = id
         dragRaw = Offset(el.x, el.y)
+        dragSnapFree = snapFree
+        if (snapFree) {
+            dragXTargets = emptyList()
+            dragYTargets = emptyList()
+            _guides.value = SnapGuides()
+            return
+        }
         val xt = mutableListOf<SnapTarget>()
         val yt = mutableListOf<SnapTarget>()
         t.elements.forEach { other ->
@@ -229,32 +238,37 @@ class EditorViewModel(app: Application, private val templateId: String) : Androi
         dragRaw = raw
 
         val size = LabelRenderer.measure(el)
-        val centerX = spec.lengthPx / 2f
-        val centerY = LabelSpec.PRINT_HEIGHT_PX / 2f
+        var nx = raw.x
+        var ny = raw.y
 
-        // Label center + borders, then the cached lines of the other elements.
-        val xTargets = listOf(
-            SnapTarget(centerX, true, LABEL_SNAP_TOL),
-            SnapTarget(0f, false, LABEL_SNAP_TOL),
-            SnapTarget(spec.lengthPx.toFloat(), false, LABEL_SNAP_TOL),
-        ) + dragXTargets
-        val yTargets = listOf(
-            SnapTarget(centerY, true, LABEL_SNAP_TOL),
-            SnapTarget(0f, false, LABEL_SNAP_TOL),
-            SnapTarget(LabelSpec.PRINT_HEIGHT_PX.toFloat(), false, LABEL_SNAP_TOL),
-        ) + dragYTargets
+        if (!dragSnapFree) {
+            val centerX = spec.lengthPx / 2f
+            val centerY = LabelSpec.PRINT_HEIGHT_PX / 2f
 
-        val snapX = bestSnapAxis(raw.x, size.width, xTargets)
-        val snapY = bestSnapAxis(raw.y, size.height, yTargets)
+            // Label center + borders, then the cached lines of the other elements.
+            val xTargets = listOf(
+                SnapTarget(centerX, true, LABEL_SNAP_TOL),
+                SnapTarget(0f, false, LABEL_SNAP_TOL),
+                SnapTarget(spec.lengthPx.toFloat(), false, LABEL_SNAP_TOL),
+            ) + dragXTargets
+            val yTargets = listOf(
+                SnapTarget(centerY, true, LABEL_SNAP_TOL),
+                SnapTarget(0f, false, LABEL_SNAP_TOL),
+                SnapTarget(LabelSpec.PRINT_HEIGHT_PX.toFloat(), false, LABEL_SNAP_TOL),
+            ) + dragYTargets
 
-        var nx = snapX?.origin ?: raw.x
-        var ny = snapY?.origin ?: raw.y
+            val snapX = bestSnapAxis(raw.x, size.width, xTargets)
+            val snapY = bestSnapAxis(raw.y, size.height, yTargets)
 
-        // Keep at least 8 px grabbable
+            nx = snapX?.origin ?: raw.x
+            ny = snapY?.origin ?: raw.y
+            _guides.value = SnapGuides(snapX?.guideLine, snapY?.guideLine)
+        }
+
+        // Keep at least 8 px grabbable. This is placement, not snapping, so it always applies.
         nx = nx.coerceIn(8f - size.width, spec.lengthPx - 8f)
         ny = ny.coerceIn(8f - size.height, LabelSpec.PRINT_HEIGHT_PX - 8f)
 
-        _guides.value = SnapGuides(snapX?.guideLine, snapY?.guideLine)
         applyWithoutHistory(el.moved(nx - el.x, ny - el.y))
     }
 
@@ -288,6 +302,7 @@ class EditorViewModel(app: Application, private val templateId: String) : Androi
     fun endDrag() {
         dragId = null
         dragRaw = null
+        dragSnapFree = false
         dragXTargets = emptyList()
         dragYTargets = emptyList()
         _guides.value = SnapGuides()
