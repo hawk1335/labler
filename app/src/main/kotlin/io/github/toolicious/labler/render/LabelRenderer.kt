@@ -34,6 +34,7 @@ import io.github.toolicious.labler.printer.dither.OutlineMethod
 import io.github.toolicious.labler.printer.dither.Ditherer
 import io.github.toolicious.labler.printer.dither.Outline
 import kotlin.math.ceil
+import kotlin.math.round
 
 /**
  * Renders a label 1:1 at print resolution (lengthPx x 96, white background).
@@ -48,6 +49,10 @@ object LabelRenderer {
     // recompute them every frame. Keyed by everything that affects the output; LruCache is thread-safe.
     private val matrixCache = LruCache<String, BitMatrix>(16)
     private val imageCache = LruCache<String, IntArray>(8)
+
+    // Nearest neighbor, so rotating does not blur the 1-bit rasters and magnifying them in the
+    // editor shows the real dots.
+    private val nnPaint = Paint().apply { isAntiAlias = false; isFilterBitmap = false }
 
     fun render(spec: LabelSpec, elements: List<LabelElement>): Bitmap {
         val bmp = Bitmap.createBitmap(spec.lengthPx, LabelSpec.PRINT_HEIGHT_PX, Bitmap.Config.ARGB_8888)
@@ -65,7 +70,7 @@ object LabelRenderer {
     /** Draws onto an arbitrary Canvas in label pixel coordinates (for the editor). */
     fun drawInto(canvas: Canvas, spec: LabelSpec, elements: List<LabelElement>) {
         canvas.drawColor(Color.WHITE)
-        elements.forEach { drawElement(canvas, it) }
+        elements.forEach { drawElementInto(canvas, it) }
     }
 
     fun measure(element: LabelElement): ElementSize = when (element) {
@@ -110,7 +115,20 @@ object LabelRenderer {
         }
     }
 
-    private fun drawElement(canvas: Canvas, element: LabelElement) {
+    /**
+     * Snaps a coordinate to a whole label pixel (dot). Everything that prints as a 1-bit raster
+     * (icon, image, code, frame) has to sit on the dot grid. On the 1:1 print canvas Skia snaps it
+     * anyway, but the editor draws the selected element onto a magnified canvas, where a fractional
+     * position lands up to one dot next to the rendered label underneath and the element would
+     * visibly jump when it is selected.
+     */
+    private fun snap(v: Float): Float = round(v)
+
+    /**
+     * Draws a single element, rotated around its own center, without touching the background.
+     * The editor uses this to draw the currently selected element on top of the rendered label.
+     */
+    fun drawElementInto(canvas: Canvas, element: LabelElement) {
         val size = measure(element)
         canvas.save()
         if (element.rotation != 0) {
@@ -230,7 +248,7 @@ object LabelRenderer {
         }
         val out = IntArray(px.size) { if (black[it] && isGlyph[it]) Color.BLACK else Color.TRANSPARENT }
         val mono = Bitmap.createBitmap(out, size, size, Bitmap.Config.ARGB_8888)
-        canvas.drawBitmap(mono, e.x, e.y, null)
+        canvas.drawBitmap(mono, snap(e.x), snap(e.y), nnPaint)
         mono.recycle()
     }
 
@@ -243,19 +261,24 @@ object LabelRenderer {
             strokeWidth = e.strokePx
             style = Paint.Style.STROKE
         }
+        // Snapped edges plus the whole pixel stroke width put the stroke band on whole dots.
+        val left = snap(e.x)
+        val top = snap(e.y)
+        val right = snap(e.x + e.widthPx)
+        val bottom = snap(e.y + e.heightPx)
         val half = e.strokePx / 2f
         when (e.style) {
             FrameStyle.RECT, FrameStyle.ROUND_RECT -> canvas.drawRoundRect(
-                e.x + half, e.y + half, e.x + e.widthPx - half, e.y + e.heightPx - half,
+                left + half, top + half, right - half, bottom - half,
                 e.cornerRadiusPx, e.cornerRadiusPx, paint
             )
             FrameStyle.LINE_H -> {
                 paint.style = Paint.Style.FILL
-                canvas.drawRect(e.x, e.y, e.x + e.widthPx, e.y + e.strokePx, paint)
+                canvas.drawRect(left, top, right, top + e.strokePx, paint)
             }
             FrameStyle.LINE_V -> {
                 paint.style = Paint.Style.FILL
-                canvas.drawRect(e.x, e.y, e.x + e.strokePx, e.y + e.heightPx, paint)
+                canvas.drawRect(left, top, left + e.strokePx, bottom, paint)
             }
         }
     }
@@ -303,16 +326,14 @@ object LabelRenderer {
         val mh = matrix.height
         val px = IntArray(mw * mh) { i -> if (matrix.get(i % mw, i / mw)) Color.BLACK else Color.TRANSPARENT }
         val bmp = Bitmap.createBitmap(px, mw, mh, Bitmap.Config.ARGB_8888)
-        // Nearest-neighbor, so a rotation does not blur the modules.
-        val nn = Paint().apply { isAntiAlias = false; isFilterBitmap = false }
         // Center the code inside its reserved box (whitespace around it); the caption sits in the
         // bottom band. The frame is at least as wide as the bars, so a 1D barcode is never clipped.
         val frameW = maxOf(e.widthPx, mw.toFloat())
         val captionH = barcodeCaptionHeight(e)
         val codeAreaH = (e.heightPx - captionH).coerceAtLeast(mh.toFloat())
-        val ox = e.x + (frameW - mw) / 2f
-        val oy = e.y + (codeAreaH - mh) / 2f
-        canvas.drawBitmap(bmp, ox, oy, nn)
+        val ox = snap(e.x + (frameW - mw) / 2f)
+        val oy = snap(e.y + (codeAreaH - mh) / 2f)
+        canvas.drawBitmap(bmp, ox, oy, nnPaint)
         bmp.recycle()
         if (captionH > 0f) {
             val tp = TextPaint().apply {
@@ -332,9 +353,13 @@ object LabelRenderer {
             style = Paint.Style.STROKE
             strokeWidth = 2f
         }
-        canvas.drawRect(e.x, e.y, e.x + e.widthPx, e.y + e.heightPx, p)
-        canvas.drawLine(e.x, e.y, e.x + e.widthPx, e.y + e.heightPx, p)
-        canvas.drawLine(e.x + e.widthPx, e.y, e.x, e.y + e.heightPx, p)
+        val left = snap(e.x)
+        val top = snap(e.y)
+        val right = snap(e.x + e.widthPx)
+        val bottom = snap(e.y + e.heightPx)
+        canvas.drawRect(left, top, right, bottom, p)
+        canvas.drawLine(left, top, right, bottom, p)
+        canvas.drawLine(right, top, left, bottom, p)
     }
 
     // ----- Image (imported, dithered) -----
@@ -345,9 +370,7 @@ object LabelRenderer {
         val h = e.heightPx.toInt().coerceAtLeast(4)
         val out = imagePixels(e, w, h) ?: return
         val bmp = Bitmap.createBitmap(out, w, h, Bitmap.Config.ARGB_8888)
-        // Nearest-neighbor, so a rotation does not blur the 1-bit edges.
-        val nn = Paint().apply { isAntiAlias = false; isFilterBitmap = false }
-        canvas.drawBitmap(bmp, e.x, e.y, nn)
+        canvas.drawBitmap(bmp, snap(e.x), snap(e.y), nnPaint)
         bmp.recycle()
     }
 

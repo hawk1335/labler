@@ -1,5 +1,6 @@
 package io.github.toolicious.labler.ui.editor
 
+import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -39,6 +40,7 @@ import io.github.toolicious.labler.model.LabelTextAlign
 import io.github.toolicious.labler.model.TextElement
 import io.github.toolicious.labler.printer.MediaType
 import io.github.toolicious.labler.render.LabelRenderer
+import io.github.toolicious.labler.render.MonoConverter
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.math.abs
 import kotlin.math.cos
@@ -63,6 +65,10 @@ private fun elementBounds(el: LabelElement): Rect {
  * border is dark gray. Tapping selects an element, dragging moves it, and the
  * round handle at the bottom right scales it. Dragging out of a double tap moves
  * without snapping. Element coordinates are label pixels.
+ *
+ * The label is shown print accurate: everything but the selected element is rendered
+ * through the real print pipeline and magnified without interpolation, so the editor
+ * shows the printed dots instead of a smooth screen resolution image.
  */
 @Composable
 fun EditorCanvas(
@@ -96,6 +102,19 @@ fun EditorCanvas(
         (boxSize.width - labelW * total) / 2f,
         (boxSize.height - labelH * total) / 2f,
     )
+
+    // The label as the printer sees it: 1 px per dot, 1 bit, same pipeline as the print preview.
+    // The selected element is left out and drawn on top as vector graphics, so it stays readable
+    // while it is being edited. That also keeps this bitmap valid while dragging or typing, because
+    // only the selected element changes then.
+    val others = elements.filter { it.id != selectedId }
+    val base = remember(spec, others) { MonoConverter.toBitmap(LabelRenderer.renderMono(spec, others)) }
+    // Nearest neighbor while magnifying (the normal case) shows the real dot pattern. A label may be
+    // up to 500 mm = 4000 dots long and then no longer fits the canvas width; when shrinking, nearest
+    // neighbor would swallow whole dot columns, so interpolate instead.
+    val basePaint = remember(total < 1f) {
+        Paint().apply { isAntiAlias = false; isFilterBitmap = total < 1f }
+    }
 
     // Current values for the gestures, without restarting the detector on every change.
     val elementsState = rememberUpdatedState(elements)
@@ -178,8 +197,8 @@ fun EditorCanvas(
                 val save = nc.save()
                 nc.translate(contentTL.x, contentTL.y)
                 nc.scale(total, total)
-                // Without a clip, LabelRenderer.drawInto (drawColor WHITE) fills the whole
-                // canvas white and covers the gray border; therefore limit it to the label.
+                // The clip cuts the rounded corners of a die-cut label and keeps an element that
+                // sticks out over the label edge from painting onto the gray border.
                 if (isDieCut) {
                     val path = android.graphics.Path().apply {
                         addRoundRect(0f, 0f, labelW, labelH, cornerR, cornerR, android.graphics.Path.Direction.CW)
@@ -188,7 +207,10 @@ fun EditorCanvas(
                 } else {
                     nc.clipRect(0f, 0f, labelW, labelH)
                 }
-                LabelRenderer.drawInto(nc, spec, elements)
+                nc.drawBitmap(base, 0f, 0f, basePaint)
+                // Drawn last, so a selected element moves to the front while it is selected and
+                // drops back into its place in the stack when it is deselected.
+                elements.find { it.id == selectedId }?.let { LabelRenderer.drawElementInto(nc, it) }
                 nc.restoreToCount(save)
             }
             // Frame around the label: fixed size rounded, continuous hard.
