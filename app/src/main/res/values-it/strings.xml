@@ -146,6 +146,27 @@
     <string name="info_firmware">Firmware: %1$s</string>
     <string name="info_serial">Numero di serie: %1$s</string>
     <string name="info_hardware">Hardware: %1$s</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">Caratteri</string>
+    <string name="fonts_manage">Gestisci caratteri personali</string>
+    <string name="fonts_title">Gestisci caratteri</string>
+    <string name="fonts_add">Aggiungi carattere</string>
+    <string name="fonts_empty">Nessun carattere personale. Usa «+» in alto per aggiungere file TTF o OTF dal dispositivo.</string>
+    <string name="fonts_source">File: %1$s</string>
+    <string name="fonts_rename">Rinomina</string>
+    <string name="fonts_rename_title">Nome visualizzato</string>
+    <string name="fonts_rename_hint">Lascia vuoto per usare di nuovo il nome del file del carattere.</string>
+    <string name="fonts_replace">Sostituisci file</string>
+    <string name="fonts_delete">Rimuovi</string>
+    <string name="fonts_delete_title">Rimuovere «%1$s»?</string>
+    <string name="fonts_delete_message">I modelli mantengono il riferimento e mostreranno di nuovo il carattere appena verrà aggiunto.</string>
+    <string name="fonts_missing_hint">Il carattere «%1$s» manca, viene mostrato un carattere predefinito.</string>
+    <string name="toast_font_added">%1$s aggiunto</string>
+    <string name="toast_fonts_added">%1$d caratteri aggiunti</string>
+    <string name="toast_fonts_added_partial">%1$d di %2$d caratteri aggiunti</string>
+    <string name="err_font_invalid">File del carattere non valido</string>
+    <string name="err_font_duplicate">«%1$s» è già presente</string>
+
     <string name="settings_diagnostics">Diagnostica</string>
     <string name="settings_testtools">Strumenti di stampa di prova (motivo geometrico)</string>
     <string name="settings_experimental">Sperimentale</string>

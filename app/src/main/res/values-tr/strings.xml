@@ -146,6 +146,27 @@
     <string name="info_firmware">Ürün yazılımı: %1$s</string>
     <string name="info_serial">Seri numarası: %1$s</string>
     <string name="info_hardware">Donanım: %1$s</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">Yazı tipleri</string>
+    <string name="fonts_manage">Kendi yazı tiplerini yönet</string>
+    <string name="fonts_title">Yazı tiplerini yönet</string>
+    <string name="fonts_add">Yazı tipi ekle</string>
+    <string name="fonts_empty">Henüz kendi yazı tipin yok. Cihazından TTF veya OTF dosyaları eklemek için yukarıdaki \"+\" düğmesini kullan.</string>
+    <string name="fonts_source">Dosya: %1$s</string>
+    <string name="fonts_rename">Yeniden adlandır</string>
+    <string name="fonts_rename_title">Görünen ad</string>
+    <string name="fonts_rename_hint">Yazı tipi dosyasındaki adı yeniden kullanmak için boş bırak.</string>
+    <string name="fonts_replace">Dosyayı değiştir</string>
+    <string name="fonts_delete">Kaldır</string>
+    <string name="fonts_delete_title">\"%1$s\" kaldırılsın mı?</string>
+    <string name="fonts_delete_message">Şablonlar başvuruyu korur ve yazı tipi yeniden eklendiğinde onu tekrar gösterir.</string>
+    <string name="fonts_missing_hint">\"%1$s\" yazı tipi eksik, varsayılan bir yazı tipi gösteriliyor.</string>
+    <string name="toast_font_added">%1$s eklendi</string>
+    <string name="toast_fonts_added">%1$d yazı tipi eklendi</string>
+    <string name="toast_fonts_added_partial">%2$d yazı tipinden %1$d tanesi eklendi</string>
+    <string name="err_font_invalid">Geçerli bir yazı tipi dosyası değil</string>
+    <string name="err_font_duplicate">\"%1$s\" zaten ekli</string>
+
     <string name="settings_diagnostics">Tanılama</string>
     <string name="settings_testtools">Test yazdırma araçları (geometri deseni)</string>
     <string name="settings_experimental">Deneysel</string>

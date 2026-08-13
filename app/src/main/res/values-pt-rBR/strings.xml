@@ -146,6 +146,27 @@
     <string name="info_firmware">Firmware: %1$s</string>
     <string name="info_serial">Número de série: %1$s</string>
     <string name="info_hardware">Hardware: %1$s</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">Fontes</string>
+    <string name="fonts_manage">Gerenciar fontes personalizadas</string>
+    <string name="fonts_title">Gerenciar fontes</string>
+    <string name="fonts_add">Adicionar fonte</string>
+    <string name="fonts_empty">Ainda não há fontes personalizadas. Use \"+\" acima para adicionar arquivos TTF ou OTF do seu dispositivo.</string>
+    <string name="fonts_source">Arquivo: %1$s</string>
+    <string name="fonts_rename">Renomear</string>
+    <string name="fonts_rename_title">Nome exibido</string>
+    <string name="fonts_rename_hint">Deixe vazio para usar novamente o nome do arquivo de fonte.</string>
+    <string name="fonts_replace">Substituir arquivo</string>
+    <string name="fonts_delete">Remover</string>
+    <string name="fonts_delete_title">Remover \"%1$s\"?</string>
+    <string name="fonts_delete_message">Os modelos mantêm a referência e mostrarão a fonte novamente assim que ela for adicionada de volta.</string>
+    <string name="fonts_missing_hint">A fonte \"%1$s\" está faltando, uma fonte padrão é exibida.</string>
+    <string name="toast_font_added">%1$s adicionada</string>
+    <string name="toast_fonts_added">%1$d fontes adicionadas</string>
+    <string name="toast_fonts_added_partial">%1$d de %2$d fontes adicionadas</string>
+    <string name="err_font_invalid">Arquivo de fonte inválido</string>
+    <string name="err_font_duplicate">\"%1$s\" já foi adicionada</string>
+
     <string name="settings_diagnostics">Diagnóstico</string>
     <string name="settings_testtools">Ferramentas de impressão de teste (padrão geométrico)</string>
     <string name="settings_experimental">Experimental</string>

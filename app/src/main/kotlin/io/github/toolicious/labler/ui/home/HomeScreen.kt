@@ -77,6 +77,7 @@ import io.github.toolicious.labler.R
 import io.github.toolicious.labler.model.LabelSpec
 import io.github.toolicious.labler.model.LabelTemplate
 import io.github.toolicious.labler.printer.MediaType
+import io.github.toolicious.labler.render.FontRegistry
 import io.github.toolicious.labler.render.LabelRenderer
 import io.github.toolicious.labler.ui.components.ClearButton
 import io.github.toolicious.labler.ui.components.PrinterStatusChip
@@ -323,7 +324,9 @@ private fun TemplateCard(
         )
     ) {
         Column(Modifier.padding(10.dp)) {
-            val bitmap = remember(template.id, template.updatedAt) {
+            // The revision is a key as well, so a thumbnail is re-rendered once a custom font
+            // it references becomes available or is removed.
+            val bitmap = remember(template.id, template.updatedAt, FontRegistry.revision) {
                 LabelRenderer.render(template.spec, template.elements).asImageBitmap()
             }
             // Fixed size (die-cut label) = rounded corners, continuous = hard corners.

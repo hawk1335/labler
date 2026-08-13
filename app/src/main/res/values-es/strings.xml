@@ -146,6 +146,27 @@
     <string name="info_firmware">Firmware: %1$s</string>
     <string name="info_serial">Número de serie: %1$s</string>
     <string name="info_hardware">Hardware: %1$s</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">Fuentes</string>
+    <string name="fonts_manage">Gestionar fuentes propias</string>
+    <string name="fonts_title">Gestionar fuentes</string>
+    <string name="fonts_add">Añadir fuente</string>
+    <string name="fonts_empty">Aún no hay fuentes propias. Usa «+» arriba para añadir archivos TTF u OTF desde tu dispositivo.</string>
+    <string name="fonts_source">Archivo: %1$s</string>
+    <string name="fonts_rename">Renombrar</string>
+    <string name="fonts_rename_title">Nombre visible</string>
+    <string name="fonts_rename_hint">Déjalo vacío para volver a usar el nombre del archivo de fuente.</string>
+    <string name="fonts_replace">Sustituir archivo</string>
+    <string name="fonts_delete">Quitar</string>
+    <string name="fonts_delete_title">¿Quitar «%1$s»?</string>
+    <string name="fonts_delete_message">Las plantillas conservan la referencia y volverán a mostrar la fuente en cuanto se añada de nuevo.</string>
+    <string name="fonts_missing_hint">Falta la fuente «%1$s», se muestra una fuente predeterminada.</string>
+    <string name="toast_font_added">%1$s añadida</string>
+    <string name="toast_fonts_added">%1$d fuentes añadidas</string>
+    <string name="toast_fonts_added_partial">%1$d de %2$d fuentes añadidas</string>
+    <string name="err_font_invalid">No es un archivo de fuente válido</string>
+    <string name="err_font_duplicate">«%1$s» ya está añadida</string>
+
     <string name="settings_diagnostics">Diagnóstico</string>
     <string name="settings_testtools">Herramientas de impresión de prueba (patrón geométrico)</string>
     <string name="settings_experimental">Experimental</string>

@@ -45,6 +45,7 @@ import io.github.toolicious.labler.ble.PrinterState
 import io.github.toolicious.labler.model.LabelTemplate
 import io.github.toolicious.labler.model.Placeholders
 import io.github.toolicious.labler.printer.MediaType
+import io.github.toolicious.labler.render.FontRegistry
 import io.github.toolicious.labler.render.LabelRenderer
 import io.github.toolicious.labler.render.MonoConverter
 import io.github.toolicious.labler.ui.components.ClearButton
@@ -76,7 +77,9 @@ fun TemplatePrintSheet(
     var copies by remember { mutableIntStateOf(1) }
     var media by remember { mutableStateOf(template.spec.media) }
 
-    val previewImage = remember(template, answers) {
+    // The revision is a key too, because custom fonts load in the background and may only
+    // become available after this sheet is already on screen.
+    val previewImage = remember(template, answers, FontRegistry.revision) {
         val now = Date()
         val context = Placeholders.Context(
             dateText = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(now),

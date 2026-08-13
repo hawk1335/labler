@@ -146,6 +146,27 @@
     <string name="info_firmware">ファームウェア: %1$s</string>
     <string name="info_serial">シリアル番号: %1$s</string>
     <string name="info_hardware">ハードウェア: %1$s</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">フォント</string>
+    <string name="fonts_manage">カスタムフォントを管理</string>
+    <string name="fonts_title">フォントの管理</string>
+    <string name="fonts_add">フォントを追加</string>
+    <string name="fonts_empty">カスタムフォントはまだありません。上の「+」から端末の TTF または OTF ファイルを追加できます。</string>
+    <string name="fonts_source">ファイル: %1$s</string>
+    <string name="fonts_rename">名前を変更</string>
+    <string name="fonts_rename_title">表示名</string>
+    <string name="fonts_rename_hint">空にすると、フォントファイルの名前に戻ります。</string>
+    <string name="fonts_replace">ファイルを差し替え</string>
+    <string name="fonts_delete">削除</string>
+    <string name="fonts_delete_title">「%1$s」を削除しますか？</string>
+    <string name="fonts_delete_message">テンプレートは参照を保持し、フォントを再び追加すると元どおり表示されます。</string>
+    <string name="fonts_missing_hint">フォント「%1$s」がありません。既定のフォントで表示しています。</string>
+    <string name="toast_font_added">%1$s を追加しました</string>
+    <string name="toast_fonts_added">%1$d 件のフォントを追加しました</string>
+    <string name="toast_fonts_added_partial">%2$d 件中 %1$d 件のフォントを追加しました</string>
+    <string name="err_font_invalid">有効なフォントファイルではありません</string>
+    <string name="err_font_duplicate">「%1$s」は既に追加されています</string>
+
     <string name="settings_diagnostics">診断</string>
     <string name="settings_testtools">テスト印刷ツール (ジオメトリパターン)</string>
     <string name="settings_experimental">実験的</string>

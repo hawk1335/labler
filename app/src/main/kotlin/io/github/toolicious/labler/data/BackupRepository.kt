@@ -26,6 +26,10 @@ data class BackupFile(
 /**
  * Full backup: export all templates plus app settings to a JSON file
  * and read them back in. The templates are self-contained (incl. image Base64).
+ *
+ * Custom fonts are deliberately not part of a backup. Only the reference travels along, inside
+ * the elements, which keeps backups small and avoids handing on licensed font files. On a device
+ * without that font a template shows its fallback until the font is added there as well.
  */
 class BackupRepository(
     private val templates: TemplateRepository,

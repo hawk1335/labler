@@ -43,6 +43,7 @@ import io.github.toolicious.labler.R
 import io.github.toolicious.labler.data.PrintHistoryEntry
 import io.github.toolicious.labler.model.LabelSpec
 import io.github.toolicious.labler.printer.MonoImage
+import io.github.toolicious.labler.render.FontRegistry
 import io.github.toolicious.labler.render.LabelRenderer
 import io.github.toolicious.labler.ui.components.rememberBlePermissionRunner
 import io.github.toolicious.labler.ui.print.PrintSheet
@@ -123,7 +124,7 @@ private fun HistoryCard(
 ) {
     Card {
         Column(Modifier.padding(12.dp)) {
-            val bitmap = remember(entry.id) {
+            val bitmap = remember(entry.id, FontRegistry.revision) {
                 LabelRenderer.render(entry.spec, entry.elements).asImageBitmap()
             }
             Image(

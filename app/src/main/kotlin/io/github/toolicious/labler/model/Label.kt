@@ -69,6 +69,12 @@ data class TextElement(
     val underline: Boolean = false,
     val align: LabelTextAlign = LabelTextAlign.LEFT,
     val font: LabelFont = LabelFont.SANS,
+    /**
+     * Family name of a custom font, or null to use the built-in [font]. The reference is kept
+     * even while that font is not installed, so [font] renders as a stand-in and the template
+     * repairs itself as soon as the font is added back.
+     */
+    val customFont: String? = null,
     val boxWidthPx: Float? = null,
 ) : LabelElement {
     override fun moved(dx: Float, dy: Float) = copy(x = x + dx, y = y + dy)

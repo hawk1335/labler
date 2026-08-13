@@ -146,6 +146,27 @@
     <string name="info_firmware">固件：%1$s</string>
     <string name="info_serial">序列号：%1$s</string>
     <string name="info_hardware">硬件：%1$s</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">字体</string>
+    <string name="fonts_manage">管理自定义字体</string>
+    <string name="fonts_title">管理字体</string>
+    <string name="fonts_add">添加字体</string>
+    <string name="fonts_empty">还没有自定义字体。点击上方的“+”，从设备中添加 TTF 或 OTF 文件。</string>
+    <string name="fonts_source">文件：%1$s</string>
+    <string name="fonts_rename">重命名</string>
+    <string name="fonts_rename_title">显示名称</string>
+    <string name="fonts_rename_hint">留空即可恢复使用字体文件中的名称。</string>
+    <string name="fonts_replace">替换文件</string>
+    <string name="fonts_delete">移除</string>
+    <string name="fonts_delete_title">移除“%1$s”？</string>
+    <string name="fonts_delete_message">模板会保留引用，重新添加该字体后会再次显示。</string>
+    <string name="fonts_missing_hint">缺少字体“%1$s”，正在显示默认字体。</string>
+    <string name="toast_font_added">已添加 %1$s</string>
+    <string name="toast_fonts_added">已添加 %1$d 个字体</string>
+    <string name="toast_fonts_added_partial">已添加 %2$d 个字体中的 %1$d 个</string>
+    <string name="err_font_invalid">不是有效的字体文件</string>
+    <string name="err_font_duplicate">“%1$s”已存在</string>
+
     <string name="settings_diagnostics">诊断</string>
     <string name="settings_testtools">测试打印工具（几何图案）</string>
     <string name="settings_experimental">实验性</string>

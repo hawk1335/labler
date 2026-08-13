@@ -35,6 +35,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -56,6 +57,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -71,6 +73,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
@@ -79,7 +83,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.toolicious.labler.App
 import io.github.toolicious.labler.R
+import io.github.toolicious.labler.data.CustomFontRepository
 import io.github.toolicious.labler.model.BarcodeElement
 import io.github.toolicious.labler.model.FrameElement
 import io.github.toolicious.labler.model.FrameStyle
@@ -95,8 +101,10 @@ import io.github.toolicious.labler.model.Symbology
 import io.github.toolicious.labler.model.TextElement
 import io.github.toolicious.labler.printer.dither.DitherMode
 import io.github.toolicious.labler.printer.dither.OutlineMethod
+import io.github.toolicious.labler.render.FontRegistry
 import io.github.toolicious.labler.render.LabelRenderer
 import io.github.toolicious.labler.ui.components.ClearButton
+import io.github.toolicious.labler.ui.components.labelFontFamily
 import io.github.toolicious.labler.ui.components.rememberBlePermissionRunner
 import io.github.toolicious.labler.ui.home.LabelDialog
 import kotlinx.coroutines.Dispatchers
@@ -113,6 +121,7 @@ fun EditorScreen(
     templateId: String,
     onBack: () -> Unit,
     onOpenSettings: () -> Unit = {},
+    onOpenFonts: () -> Unit = {},
     vm: EditorViewModel = viewModel(factory = EditorViewModel.factory(templateId)),
 ) {
     val template by vm.template.collectAsState()
@@ -201,22 +210,26 @@ fun EditorScreen(
                 .padding(horizontal = 12.dp)
                 .fillMaxSize()
         ) {
-            EditorCanvas(
-                spec = t.spec,
-                elements = t.elements,
-                selectedId = selectedId,
-                guides = guides,
-                onSelect = vm::select,
-                onDragStart = vm::beginDrag,
-                onDragBy = vm::dragBy,
-                onDragEnd = vm::endDrag,
-                onResizeStart = vm::beginResize,
-                onResizeBy = vm::resizeSelectedBy,
-                onResizeEnd = vm::endResize,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )
+            // Text metrics depend on which fonts are installed, so the canvas has to be rebuilt
+            // once a custom font finishes loading or the user adds or removes one.
+            key(FontRegistry.revision) {
+                EditorCanvas(
+                    spec = t.spec,
+                    elements = t.elements,
+                    selectedId = selectedId,
+                    guides = guides,
+                    onSelect = vm::select,
+                    onDragStart = vm::beginDrag,
+                    onDragBy = vm::dragBy,
+                    onDragEnd = vm::endDrag,
+                    onResizeStart = vm::beginResize,
+                    onResizeBy = vm::resizeSelectedBy,
+                    onResizeEnd = vm::endResize,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+            }
             // Only the label (canvas) stays fixed; everything below it scrolls. imePadding must come
             // BEFORE verticalScroll so it shrinks the scroll viewport to the keyboard edge (not just
             // the content); otherwise, with edge-to-edge, the viewport reaches behind the keyboard and
@@ -313,7 +326,8 @@ fun EditorScreen(
                     PropertiesPanel(
                         element = element,
                         onUpdate = vm::updateElement,
-                        onDelete = vm::deleteSelected
+                        onDelete = vm::deleteSelected,
+                        onOpenFonts = onOpenFonts
                     )
                 } ?: Text(
                     // Blank line between the two hints, so the gesture stands out as its own note.
@@ -351,12 +365,12 @@ fun EditorScreen(
 }
 
 @Composable
-private fun GroupLabel(text: String) {
+private fun GroupLabel(text: String, modifier: Modifier = Modifier) {
     Text(
         text,
         style = MaterialTheme.typography.labelMedium,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(bottom = 4.dp)
+        modifier = modifier.padding(bottom = 4.dp)
     )
 }
 
@@ -400,10 +414,11 @@ private fun PropertiesPanel(
     element: LabelElement,
     onUpdate: (LabelElement) -> Unit,
     onDelete: () -> Unit,
+    onOpenFonts: () -> Unit,
 ) {
     Column {
         when (element) {
-            is TextElement -> TextProperties(element, onUpdate)
+            is TextElement -> TextProperties(element, onUpdate, onOpenFonts)
             is IconElement -> IconProperties(element, onUpdate)
             is FrameElement -> FrameProperties(element, onUpdate)
             is BarcodeElement -> BarcodeProperties(element, onUpdate)
@@ -562,16 +577,78 @@ private fun ToggleRow(label: String, checked: Boolean, onCheckedChange: (Boolean
     }
 }
 
+/** Custom fonts, so a property panel can offer them next to the built-in ones. */
+@Composable
+private fun rememberFontRepository(): CustomFontRepository {
+    val context = LocalContext.current
+    return remember(context) { (context.applicationContext as App).container.customFonts }
+}
+
+/**
+ * Chip caption set in the font it selects, capped in width so that one long family name cannot
+ * push the whole row out of shape.
+ */
+@Composable
+private fun FontChipLabel(text: String, fontFamily: FontFamily?) {
+    Text(
+        text,
+        fontFamily = fontFamily,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.widthIn(max = 128.dp),
+    )
+}
+
+/**
+ * Outlined button for the right end of a section caption row. A stock OutlinedButton has a 40.dp
+ * minimum height and would more than double that row, so this is sized off the caption's own text
+ * style and adds only the border to it.
+ */
+@Composable
+private fun SectionActionButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val shape = RoundedCornerShape(6.dp)
+    // Deliberately not Surface(onClick), because Material 3 pads that out to the 48.dp minimum
+    // touch target and would leave a wide gap between this row and whatever follows it. Modifier
+    // .border draws inside the bounds, so the whole height is the caption line plus 2.dp.
+    Text(
+        text,
+        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Normal),
+        color = MaterialTheme.colorScheme.primary,
+        maxLines = 1,
+        modifier = modifier
+            .clip(shape)
+            .border(1.dp, MaterialTheme.colorScheme.primary, shape)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 10.dp, vertical = 2.dp),
+    )
+}
+
 /** Compact selectable chip: less horizontal padding than the stock FilterChip, so more fit per row. */
 @Composable
-private fun ChoiceChip(selected: Boolean, onClick: () -> Unit, label: @Composable () -> Unit) {
+private fun ChoiceChip(
+    selected: Boolean,
+    onClick: () -> Unit,
+    error: Boolean = false,
+    label: @Composable () -> Unit,
+) {
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(8.dp),
-        color = if (selected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
-        contentColor = if (selected) MaterialTheme.colorScheme.onSecondaryContainer
-        else MaterialTheme.colorScheme.onSurfaceVariant,
-        border = if (selected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        color = when {
+            error -> MaterialTheme.colorScheme.errorContainer
+            selected -> MaterialTheme.colorScheme.secondaryContainer
+            else -> Color.Transparent
+        },
+        contentColor = when {
+            error -> MaterialTheme.colorScheme.onErrorContainer
+            selected -> MaterialTheme.colorScheme.onSecondaryContainer
+            else -> MaterialTheme.colorScheme.onSurfaceVariant
+        },
+        border = when {
+            error -> BorderStroke(1.dp, MaterialTheme.colorScheme.error)
+            selected -> null
+            else -> BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        },
     ) {
         Box(
             modifier = Modifier.heightIn(min = 30.dp).padding(horizontal = 8.dp, vertical = 5.dp),
@@ -899,7 +976,11 @@ private fun ImageProperties(element: ImageElement, onUpdate: (LabelElement) -> U
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun TextProperties(element: TextElement, onUpdate: (LabelElement) -> Unit) {
+private fun TextProperties(
+    element: TextElement,
+    onUpdate: (LabelElement) -> Unit,
+    onOpenFonts: () -> Unit,
+) {
     OutlinedTextField(
         value = element.text,
         onValueChange = { onUpdate(element.copy(text = it)) },
@@ -918,15 +999,35 @@ private fun TextProperties(element: TextElement, onUpdate: (LabelElement) -> Uni
     )
 
     Spacer(Modifier.height(6.dp))
-    GroupLabel(stringResource(R.string.group_font))
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        // Aligned by baseline, not by box, so the button's padding and border sit around its
+        // caption instead of shifting it against the heading.
+        GroupLabel(stringResource(R.string.group_font), Modifier.alignByBaseline())
+        SectionActionButton(
+            stringResource(R.string.fonts_title),
+            onOpenFonts,
+            Modifier.alignByBaseline(),
+        )
+    }
+    val fontRepository = rememberFontRepository()
+    val customFonts by fontRepository.fonts.collectAsState()
+    val fontsReady by fontRepository.ready.collectAsState()
+    // The reference survives an uninstalled font, so it has to be shown as such instead of
+    // silently looking like the fallback the canvas draws. Reporting it waits for the initial
+    // load, otherwise every custom font would raise a false alarm right after a cold start.
+    val missingFont = element.customFont
+        ?.takeIf { family -> fontsReady && customFonts.none { it.family == family } }
     FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
         LabelFont.entries.forEach { f ->
             ChoiceChip(
-                selected = element.font == f,
-                onClick = { onUpdate(element.copy(font = f)) },
+                selected = element.customFont == null && element.font == f,
+                onClick = { onUpdate(element.copy(font = f, customFont = null)) },
                 label = {
-                    Text(
-                        when (f) {
+                    FontChipLabel(
+                        text = when (f) {
                             LabelFont.SANS -> stringResource(R.string.font_sans)
                             LabelFont.SERIF -> stringResource(R.string.font_serif)
                             LabelFont.MONO -> stringResource(R.string.font_mono)
@@ -936,12 +1037,43 @@ private fun TextProperties(element: TextElement, onUpdate: (LabelElement) -> Uni
                             LabelFont.CAVEAT -> "Caveat"
                             LabelFont.PACIFICO -> "Pacifico"
                         },
-                        maxLines = 1,
-                        softWrap = false
+                        fontFamily = labelFontFamily(font = f)
                     )
                 }
             )
         }
+        customFonts.forEach { custom ->
+            ChoiceChip(
+                selected = element.customFont == custom.family,
+                // element.font is left alone on purpose, it stays the fallback for this element.
+                onClick = { onUpdate(element.copy(customFont = custom.family)) },
+                label = {
+                    FontChipLabel(custom.label, labelFontFamily(customFamily = custom.family))
+                }
+            )
+        }
+        if (missingFont != null) {
+            ChoiceChip(
+                selected = true,
+                error = true,
+                onClick = onOpenFonts,
+                label = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Filled.Warning, contentDescription = null, modifier = Modifier.size(14.dp))
+                        Spacer(Modifier.width(4.dp))
+                        FontChipLabel(missingFont, null)
+                    }
+                }
+            )
+        }
+    }
+    if (missingFont != null) {
+        Spacer(Modifier.height(4.dp))
+        Text(
+            stringResource(R.string.fonts_missing_hint, missingFont),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.error
+        )
     }
 
     Spacer(Modifier.height(6.dp))

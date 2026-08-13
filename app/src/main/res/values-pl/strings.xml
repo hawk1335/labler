@@ -146,6 +146,27 @@
     <string name="info_firmware">Firmware: %1$s</string>
     <string name="info_serial">Numer seryjny: %1$s</string>
     <string name="info_hardware">Sprzęt: %1$s</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">Czcionki</string>
+    <string name="fonts_manage">Zarządzaj własnymi czcionkami</string>
+    <string name="fonts_title">Zarządzanie czcionkami</string>
+    <string name="fonts_add">Dodaj czcionkę</string>
+    <string name="fonts_empty">Brak własnych czcionek. Użyj „+” u góry, aby dodać pliki TTF lub OTF z urządzenia.</string>
+    <string name="fonts_source">Plik: %1$s</string>
+    <string name="fonts_rename">Zmień nazwę</string>
+    <string name="fonts_rename_title">Nazwa wyświetlana</string>
+    <string name="fonts_rename_hint">Zostaw puste, aby ponownie użyć nazwy z pliku czcionki.</string>
+    <string name="fonts_replace">Zamień plik</string>
+    <string name="fonts_delete">Usuń</string>
+    <string name="fonts_delete_title">Usunąć „%1$s”?</string>
+    <string name="fonts_delete_message">Szablony zachowują odwołanie i ponownie pokażą czcionkę, gdy zostanie dodana z powrotem.</string>
+    <string name="fonts_missing_hint">Brak czcionki „%1$s”, wyświetlana jest czcionka domyślna.</string>
+    <string name="toast_font_added">Dodano %1$s</string>
+    <string name="toast_fonts_added">Dodano czcionki: %1$d</string>
+    <string name="toast_fonts_added_partial">Dodano %1$d z %2$d czcionek</string>
+    <string name="err_font_invalid">Nieprawidłowy plik czcionki</string>
+    <string name="err_font_duplicate">„%1$s” już istnieje</string>
+
     <string name="settings_diagnostics">Diagnostyka</string>
     <string name="settings_testtools">Narzędzia wydruku testowego (wzór geometryczny)</string>
     <string name="settings_experimental">Eksperymentalne</string>

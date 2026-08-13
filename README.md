@@ -105,6 +105,8 @@ The label fonts that ship with the app are unmodified originals from [Google Fon
 
 The full copyright notices and license texts ship inside the app in [`app/src/main/assets/licenses/fonts.txt`](app/src/main/assets/licenses/fonts.txt).
 
+Beyond those, you can add your own TTF and OTF files under Settings, Fonts. They are copied into the app's private storage and stay on the device, so backups and exported templates carry only the font name. A template whose font is not installed renders in a default font and picks its own font back up as soon as you add it again.
+
 ## Thanks
 
 With thanks to the open-source Chrome web app [BleWebler](https://github.com/josb25/BleWebler), which made the P15 protocol accessible.

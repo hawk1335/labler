@@ -157,6 +157,28 @@
     <string name="info_firmware">Firmware: %1$s</string>
     <string name="info_serial">Serial number: %1$s</string>
     <string name="info_hardware">Hardware: %1$s</string>
+
+    <!-- Fonts -->
+    <string name="settings_fonts">Fonts</string>
+    <string name="fonts_manage">Manage custom fonts</string>
+    <string name="fonts_title">Manage fonts</string>
+    <string name="fonts_add">Add font</string>
+    <string name="fonts_empty">No custom fonts yet. Use \"+\" above to add TTF or OTF files from your device.</string>
+    <string name="fonts_source">File: %1$s</string>
+    <string name="fonts_rename">Rename</string>
+    <string name="fonts_rename_title">Display name</string>
+    <string name="fonts_rename_hint">Leave empty to use the name from the font file again.</string>
+    <string name="fonts_replace">Replace file</string>
+    <string name="fonts_delete">Remove</string>
+    <string name="fonts_delete_title">Remove \"%1$s\"?</string>
+    <string name="fonts_delete_message">Templates keep the reference and will show the font again once it is added back.</string>
+    <string name="fonts_missing_hint">Font \"%1$s\" is missing, a default font is shown instead.</string>
+    <string name="toast_font_added">%1$s added</string>
+    <string name="toast_fonts_added">%1$d fonts added</string>
+    <string name="toast_fonts_added_partial">%1$d of %2$d fonts added</string>
+    <string name="err_font_invalid">Not a valid font file</string>
+    <string name="err_font_duplicate">\"%1$s\" is already added</string>
+
     <string name="settings_diagnostics">Diagnostics</string>
     <string name="settings_testtools">Test print tools (geometry pattern)</string>
     <string name="settings_experimental">Experimental</string>

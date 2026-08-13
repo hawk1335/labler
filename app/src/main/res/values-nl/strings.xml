@@ -146,6 +146,27 @@
     <string name="info_firmware">Firmware: %1$s</string>
     <string name="info_serial">Serienummer: %1$s</string>
     <string name="info_hardware">Hardware: %1$s</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">Lettertypen</string>
+    <string name="fonts_manage">Eigen lettertypen beheren</string>
+    <string name="fonts_title">Lettertypen beheren</string>
+    <string name="fonts_add">Lettertype toevoegen</string>
+    <string name="fonts_empty">Nog geen eigen lettertypen. Gebruik \"+\" hierboven om TTF- of OTF-bestanden van je apparaat toe te voegen.</string>
+    <string name="fonts_source">Bestand: %1$s</string>
+    <string name="fonts_rename">Hernoemen</string>
+    <string name="fonts_rename_title">Weergavenaam</string>
+    <string name="fonts_rename_hint">Laat leeg om weer de naam uit het lettertypebestand te gebruiken.</string>
+    <string name="fonts_replace">Bestand vervangen</string>
+    <string name="fonts_delete">Verwijderen</string>
+    <string name="fonts_delete_title">\"%1$s\" verwijderen?</string>
+    <string name="fonts_delete_message">Sjablonen behouden de verwijzing en tonen het lettertype weer zodra het opnieuw is toegevoegd.</string>
+    <string name="fonts_missing_hint">Lettertype \"%1$s\" ontbreekt, er wordt een standaardlettertype getoond.</string>
+    <string name="toast_font_added">%1$s toegevoegd</string>
+    <string name="toast_fonts_added">%1$d lettertypen toegevoegd</string>
+    <string name="toast_fonts_added_partial">%1$d van %2$d lettertypen toegevoegd</string>
+    <string name="err_font_invalid">Geen geldig lettertypebestand</string>
+    <string name="err_font_duplicate">\"%1$s\" is al toegevoegd</string>
+
     <string name="settings_diagnostics">Diagnose</string>
     <string name="settings_testtools">Testafdrukgereedschap (geometriepatroon)</string>
     <string name="settings_experimental">Experimenteel</string>

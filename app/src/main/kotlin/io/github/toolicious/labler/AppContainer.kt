@@ -5,6 +5,7 @@ import androidx.room.Room
 import io.github.toolicious.labler.ble.PrinterManager
 import io.github.toolicious.labler.data.AppDatabase
 import io.github.toolicious.labler.data.BackupRepository
+import io.github.toolicious.labler.data.CustomFontRepository
 import io.github.toolicious.labler.data.HistoryRepository
 import io.github.toolicious.labler.data.MIGRATION_1_2
 import io.github.toolicious.labler.data.SettingsRepository
@@ -34,6 +35,7 @@ class AppContainer(context: Context) {
         .build()
 
     val settings = SettingsRepository(context)
+    val customFonts = CustomFontRepository(context, settings, json, applicationScope)
     val templateRepository = TemplateRepository(database.templateDao(), json)
     val historyRepository = HistoryRepository(database.printHistoryDao(), json)
     val templateJson = TemplateJson(json)

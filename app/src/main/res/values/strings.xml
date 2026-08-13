@@ -157,6 +157,28 @@
     <string name="info_firmware">Firmware: %1$s</string>
     <string name="info_serial">Seriennummer: %1$s</string>
     <string name="info_hardware">Hardware: %1$s</string>
+
+    <!-- Schriften -->
+    <string name="settings_fonts">Schriften</string>
+    <string name="fonts_manage">Eigene Schriften verwalten</string>
+    <string name="fonts_title">Schriften verwalten</string>
+    <string name="fonts_add">Schrift hinzufügen</string>
+    <string name="fonts_empty">Noch keine eigenen Schriften. Über „+“ oben lassen sich TTF- und OTF-Dateien vom Gerät hinzufügen.</string>
+    <string name="fonts_source">Datei: %1$s</string>
+    <string name="fonts_rename">Umbenennen</string>
+    <string name="fonts_rename_title">Anzeigename</string>
+    <string name="fonts_rename_hint">Leer lassen, um wieder den Namen aus der Schriftdatei zu verwenden.</string>
+    <string name="fonts_replace">Datei ersetzen</string>
+    <string name="fonts_delete">Entfernen</string>
+    <string name="fonts_delete_title">„%1$s“ entfernen?</string>
+    <string name="fonts_delete_message">Vorlagen behalten den Verweis und zeigen die Schrift wieder an, sobald sie erneut hinzugefügt wird.</string>
+    <string name="fonts_missing_hint">Schrift „%1$s“ fehlt, es wird eine Standardschrift angezeigt.</string>
+    <string name="toast_font_added">%1$s hinzugefügt</string>
+    <string name="toast_fonts_added">%1$d Schriften hinzugefügt</string>
+    <string name="toast_fonts_added_partial">%1$d von %2$d Schriften hinzugefügt</string>
+    <string name="err_font_invalid">Keine gültige Schriftdatei</string>
+    <string name="err_font_duplicate">„%1$s“ ist bereits vorhanden</string>
+
     <string name="settings_diagnostics">Diagnose</string>
     <string name="settings_testtools">Testdruck-Werkzeuge (Geometrie-Muster)</string>
     <string name="settings_experimental">Experimentell</string>

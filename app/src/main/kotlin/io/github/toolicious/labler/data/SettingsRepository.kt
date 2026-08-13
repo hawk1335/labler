@@ -23,6 +23,7 @@ class SettingsRepository(private val context: Context) {
         val DEFAULT_DIE_CUT = booleanPreferencesKey("default_die_cut")
         val LAST_SYMBOL_TAB = intPreferencesKey("last_symbol_tab")
         val PRINT_DENSITY = intPreferencesKey("print_density")
+        val CUSTOM_FONTS = stringPreferencesKey("custom_fonts")
     }
 
     val savedPrinter: Flow<SavedPrinter?> = context.dataStore.data.map { prefs ->
@@ -71,5 +72,16 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun savePrintDensity(level: Int) {
         context.dataStore.edit { it[Keys.PRINT_DENSITY] = level.coerceIn(0, 15) }
+    }
+
+    /**
+     * Serialized list of the fonts the user added. It lives here rather than in its own
+     * DataStore because a second Preferences instance on the same file would fail at runtime;
+     * CustomFontRepository owns the encoding and the font files themselves.
+     */
+    val customFontsJson: Flow<String> = context.dataStore.data.map { it[Keys.CUSTOM_FONTS] ?: "[]" }
+
+    suspend fun saveCustomFonts(raw: String) {
+        context.dataStore.edit { it[Keys.CUSTOM_FONTS] = raw }
     }
 }

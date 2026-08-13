@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.github.toolicious.labler.ui.editor.EditorScreen
+import io.github.toolicious.labler.ui.fonts.FontsScreen
 import io.github.toolicious.labler.ui.history.HistoryScreen
 import io.github.toolicious.labler.ui.home.HomeScreen
 import io.github.toolicious.labler.ui.settings.SettingsScreen
@@ -89,17 +90,22 @@ fun AppNav() {
             EditorScreen(
                 templateId = id,
                 onBack = { nav.popBackStack() },
-                onOpenSettings = { nav.navigate("settings") }
+                onOpenSettings = { nav.navigate("settings") },
+                onOpenFonts = { nav.navigate("fonts") }
             )
         }
         composable("settings") {
             SettingsScreen(
                 onBack = { nav.popBackStack() },
-                onOpenTestPrint = { nav.navigate("testprint") }
+                onOpenTestPrint = { nav.navigate("testprint") },
+                onOpenFonts = { nav.navigate("fonts") }
             )
         }
         composable("testprint") {
             TestPrintScreen(onOpenSettings = { nav.popBackStack() })
+        }
+        composable("fonts") {
+            FontsScreen(onBack = { nav.popBackStack() })
         }
     }
 }

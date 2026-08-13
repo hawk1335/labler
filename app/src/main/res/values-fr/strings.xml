@@ -146,6 +146,27 @@
     <string name="info_firmware">Firmware : %1$s</string>
     <string name="info_serial">Numéro de série : %1$s</string>
     <string name="info_hardware">Matériel : %1$s</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">Polices</string>
+    <string name="fonts_manage">Gérer les polices personnalisées</string>
+    <string name="fonts_title">Gérer les polices</string>
+    <string name="fonts_add">Ajouter une police</string>
+    <string name="fonts_empty">Aucune police personnalisée. Utilisez « + » en haut pour ajouter des fichiers TTF ou OTF depuis votre appareil.</string>
+    <string name="fonts_source">Fichier : %1$s</string>
+    <string name="fonts_rename">Renommer</string>
+    <string name="fonts_rename_title">Nom affiché</string>
+    <string name="fonts_rename_hint">Laissez vide pour réutiliser le nom du fichier de police.</string>
+    <string name="fonts_replace">Remplacer le fichier</string>
+    <string name="fonts_delete">Supprimer</string>
+    <string name="fonts_delete_title">Supprimer « %1$s » ?</string>
+    <string name="fonts_delete_message">Les modèles conservent la référence et réafficheront la police dès qu\'elle sera rajoutée.</string>
+    <string name="fonts_missing_hint">La police « %1$s » est absente, une police par défaut est affichée.</string>
+    <string name="toast_font_added">%1$s ajoutée</string>
+    <string name="toast_fonts_added">%1$d polices ajoutées</string>
+    <string name="toast_fonts_added_partial">%1$d polices sur %2$d ajoutées</string>
+    <string name="err_font_invalid">Fichier de police non valide</string>
+    <string name="err_font_duplicate">« %1$s » est déjà ajoutée</string>
+
     <string name="settings_diagnostics">Diagnostic</string>
     <string name="settings_testtools">Outils d\'impression test (motif géométrique)</string>
     <string name="settings_experimental">Expérimental</string>

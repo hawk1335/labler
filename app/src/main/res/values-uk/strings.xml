@@ -146,6 +146,27 @@
     <string name="info_firmware">Прошивка: %1$s</string>
     <string name="info_serial">Серійний номер: %1$s</string>
     <string name="info_hardware">Обладнання: %1$s</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">Шрифти</string>
+    <string name="fonts_manage">Керування власними шрифтами</string>
+    <string name="fonts_title">Керування шрифтами</string>
+    <string name="fonts_add">Додати шрифт</string>
+    <string name="fonts_empty">Власних шрифтів ще немає. Натисніть «+» угорі, щоб додати файли TTF або OTF з пристрою.</string>
+    <string name="fonts_source">Файл: %1$s</string>
+    <string name="fonts_rename">Перейменувати</string>
+    <string name="fonts_rename_title">Показувана назва</string>
+    <string name="fonts_rename_hint">Залиште порожнім, щоб знову використати назву з файла шрифту.</string>
+    <string name="fonts_replace">Замінити файл</string>
+    <string name="fonts_delete">Вилучити</string>
+    <string name="fonts_delete_title">Вилучити «%1$s»?</string>
+    <string name="fonts_delete_message">Шаблони зберігають посилання й знову покажуть шрифт, щойно його буде додано назад.</string>
+    <string name="fonts_missing_hint">Шрифту «%1$s» немає, показано типовий шрифт.</string>
+    <string name="toast_font_added">%1$s додано</string>
+    <string name="toast_fonts_added">Додано шрифтів: %1$d</string>
+    <string name="toast_fonts_added_partial">Додано %1$d з %2$d шрифтів</string>
+    <string name="err_font_invalid">Недійсний файл шрифту</string>
+    <string name="err_font_duplicate">«%1$s» вже додано</string>
+
     <string name="settings_diagnostics">Діагностика</string>
     <string name="settings_testtools">Інструменти тестового друку (геометричний шаблон)</string>
     <string name="settings_experimental">Експериментально</string>

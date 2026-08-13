@@ -62,6 +62,7 @@ import kotlin.math.roundToInt
 fun SettingsScreen(
     onBack: () -> Unit,
     onOpenTestPrint: () -> Unit = {},
+    onOpenFonts: () -> Unit = {},
     vm: SettingsViewModel = viewModel(),
 ) {
     val context = LocalContext.current
@@ -192,6 +193,11 @@ fun SettingsScreen(
             }
 
             Spacer(Modifier.height(24.dp))
+            Text(stringResource(R.string.settings_fonts), style = MaterialTheme.typography.titleMedium)
+            Spacer(Modifier.height(4.dp))
+            TextButton(onClick = onOpenFonts) { Text(stringResource(R.string.fonts_manage)) }
+
+            Spacer(Modifier.height(16.dp))
             Text(stringResource(R.string.settings_diagnostics), style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(4.dp))
             TextButton(onClick = onOpenTestPrint) { Text(stringResource(R.string.settings_testtools)) }
