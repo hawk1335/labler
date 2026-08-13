@@ -2,7 +2,7 @@ LaBLEr, Marklife ailesinin (P15, P12, L13) Bluetooth Low Energy termal etiket ya
 
 Özellikler:
 
-* Çok satırlı metin (boyut, kalın/italik/altı çizili, hizalama, birlikte gelen çeşitli yazı tipleri), simgeler ve emoji, çerçeveler, içe aktarılan görseller ve QR kodları ile barkodlar (Code 128, EAN-13, UPC-A, Code 39, ITF); bağlantılar, Wi-Fi, e-posta, telefon ve kişiler için türlenmiş QR içeriğiyle.
+* Çok satırlı metin (boyut, kalın/italik/altı çizili, hizalama, birlikte gelen çeşitli yazı tipleri ve kendi TTF ve OTF dosyalarınız), simgeler ve emoji, çerçeveler, içe aktarılan görseller ve QR kodları ile barkodlar (Code 128, EAN-13, UPC-A, Code 39, ITF); bağlantılar, Wi-Fi, e-posta, telefon ve kişiler için türlenmiş QR içeriğiyle.
 * Doğrudan işleme editörü: yakınlaştırmak ve kaydırmak için sıkıştırın, taşımak, yeniden boyutlandırmak ve döndürmek için sürükleyin; merkeze, kenarlara ve diğer öğelere yaslama ile. Grafikler 1 bitlik termal kafa için temiz bir dış çizgi (bölge izleme veya Canny kenar algılama, yumuşatma ve tersine çevirme ile) ya da eşik, Floyd-Steinberg veya Atkinson taramasıyla işlenir.
 * Şablonlar: kaydetme, yeniden adlandırma, çoğaltma, favorileme ve arama; tek bir etiketi JSON dosyası olarak dışa aktarın ya da tüm kitaplığınızı yedekleyip geri yükleyin.
 * Tarih, saat, artan bir numara veya yazdırma sırasında sorulan serbest metin için yer tutucular.

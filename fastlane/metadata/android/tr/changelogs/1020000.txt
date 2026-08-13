@@ -1,0 +1,5 @@
+- Kendi yazı tipleriniz: ayarlarda TTF ve OTF dosyaları ekleyin, editörde yazı tipi olarak seçin.
+  Bir yazı tipi eksikse varsayılan bir yazı tipi gösterilir ve özgün başvuru korunur.
+- Çift dokunup sürükleme, öğeyi yaslamadan taşır
+- Editör metni yazdırma çözünürlüğünde gösterir
+- Etiket boyutuna dokunmak etiket iletişim kutusunu açar

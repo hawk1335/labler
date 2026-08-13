@@ -1,0 +1,5 @@
+- Eigen lettertypen: voeg TTF- en OTF-bestanden toe in de instellingen en kies ze als lettertype in de editor.
+  Ontbreekt een lettertype, dan wordt een standaardlettertype getoond en blijft de oorspronkelijke verwijzing bewaard.
+- Dubbeltik en sleep verplaatst een element zonder uitlijnen
+- De editor toont tekst op printerresolutie
+- Op het labelformaat tikken opent het labelvenster

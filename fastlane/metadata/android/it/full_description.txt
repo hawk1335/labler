@@ -2,7 +2,7 @@ LaBLEr è un'app per stampare su stampanti termiche di etichette Bluetooth Low E
 
 Funzioni:
 
-* Testo su più righe (dimensione, grassetto/corsivo/sottolineato, allineamento, diversi font inclusi), simboli ed emoji, cornici, immagini importate e codici QR e a barre (Code 128, EAN-13, UPC-A, Code 39, ITF) con contenuti QR tipizzati per link, Wi-Fi, e-mail, telefono e contatti.
+* Testo su più righe (dimensione, grassetto/corsivo/sottolineato, allineamento, diversi font inclusi più i tuoi file TTF e OTF), simboli ed emoji, cornici, immagini importate e codici QR e a barre (Code 128, EAN-13, UPC-A, Code 39, ITF) con contenuti QR tipizzati per link, Wi-Fi, e-mail, telefono e contatti.
 * Un editor a manipolazione diretta: pizzica per ingrandire e scorrere, trascina per spostare, ridimensiona e ruota, con aggancio al centro, ai bordi e agli altri elementi. La grafica viene resa per la testina termica a 1 bit come un contorno pulito (tracciamento delle regioni o rilevamento dei bordi Canny, con una passata di smussatura e inversione) oppure con retinatura a soglia, Floyd-Steinberg o Atkinson.
 * Modelli: salva, rinomina, duplica, aggiungi ai preferiti e cerca; esporta una singola etichetta come file JSON, oppure esegui il backup e il ripristino dell'intera libreria.
 * Segnaposto per la data, l'ora, un numero progressivo o un testo libero che ti viene chiesto al momento della stampa.

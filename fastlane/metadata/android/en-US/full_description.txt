@@ -2,7 +2,7 @@ LaBLEr is a label printer app for Bluetooth Low Energy thermal label printers of
 
 Features:
 
-* Multi-line text (size, bold/italic/underline, alignment, several bundled fonts), symbols and emoji, frames, imported images, and QR codes and barcodes (Code 128, EAN-13, UPC-A, Code 39, ITF) with typed QR content for links, Wi-Fi, email, phone and contacts.
+* Multi-line text (size, bold/italic/underline, alignment, several bundled fonts plus your own TTF and OTF files), symbols and emoji, frames, imported images, and QR codes and barcodes (Code 128, EAN-13, UPC-A, Code 39, ITF) with typed QR content for links, Wi-Fi, email, phone and contacts.
 * A direct-manipulation editor: pinch to zoom and pan, drag to move, resize and rotate, with snapping to the center, the edges and other elements. Graphics render for the 1-bit thermal head as a clean outline (region tracing or Canny edge detection, with a smooth pass and invert) or with a threshold, Floyd-Steinberg or Atkinson dithering.
 * Templates: save, rename, duplicate, favorite and search; export a single label as a JSON file, or back up and restore your whole library.
 * Placeholders for the date, the time, a running number, or a free-text value you are asked for at print time.

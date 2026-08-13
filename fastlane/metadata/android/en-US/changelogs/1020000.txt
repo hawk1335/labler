@@ -1,0 +1,5 @@
+- Custom fonts: Add TTF and OTF files under Settings and pick them as a font in the editor.
+  If a font is missing, a default font is shown, keeping the original reference.
+- Double-tap drag moves an element without snapping
+- Editor shows text labels at printer resolution
+- Tapping the label size opens the label dialog

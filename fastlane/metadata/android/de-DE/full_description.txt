@@ -2,7 +2,7 @@ LaBLEr ist eine App zum Bedrucken von Bluetooth-Low-Energy-Thermo-Etikettendruck
 
 Funktionen:
 
-* Mehrzeiliger Text (Größe, fett/kursiv/unterstrichen, Ausrichtung, mehrere mitgelieferte Schriften), Symbole und Emoji, Rahmen, importierte Bilder sowie QR-Codes und Barcodes (Code 128, EAN-13, UPC-A, Code 39, ITF) mit typisierten QR-Inhalten für Links, WLAN, E-Mail, Telefon und Kontakte.
+* Mehrzeiliger Text (Größe, fett/kursiv/unterstrichen, Ausrichtung, mehrere mitgelieferte Schriften plus eigene TTF- und OTF-Dateien), Symbole und Emoji, Rahmen, importierte Bilder sowie QR-Codes und Barcodes (Code 128, EAN-13, UPC-A, Code 39, ITF) mit typisierten QR-Inhalten für Links, WLAN, E-Mail, Telefon und Kontakte.
 * Ein Editor mit direkter Bearbeitung: Pinch-Zoom und Verschieben, Ziehen, Skalieren und Drehen, mit Einrasten an Mitte, Kanten und anderen Elementen. Grafiken werden für den 1-Bit-Thermokopf als sauberer Umriss (Flächen-Nachzeichnung oder Canny-Kantenerkennung, mit Glätten und Invertieren) oder mit Schwellwert-, Floyd-Steinberg- oder Atkinson-Dithering gerendert.
 * Vorlagen: speichern, umbenennen, duplizieren, favorisieren und suchen; ein einzelnes Etikett als JSON exportieren oder die ganze Sammlung sichern und wiederherstellen.
 * Platzhalter für Datum, Uhrzeit, eine laufende Nummer oder einen Freitext, der beim Drucken abgefragt wird.

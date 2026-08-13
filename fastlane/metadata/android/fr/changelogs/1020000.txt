@@ -1,0 +1,5 @@
+- Polices personnalisées : ajoutez des fichiers TTF et OTF dans les paramètres et choisissez-les comme police dans l'éditeur.
+  Si une police est absente, une police par défaut est affichée et la référence d'origine est conservée.
+- Le glisser après double appui déplace un élément sans magnétisme
+- L'éditeur affiche le texte à la résolution d'impression
+- Appuyer sur la taille de l'étiquette ouvre la boîte de dialogue

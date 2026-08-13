@@ -1,0 +1,5 @@
+- Fontes próprias: adicione arquivos TTF e OTF nas configurações e escolha-os como fonte no editor.
+  Se uma fonte estiver faltando, uma fonte padrão é exibida e a referência original é mantida.
+- Arrastar com toque duplo move um elemento sem encaixe
+- O editor mostra o texto na resolução de impressão
+- Tocar no tamanho da etiqueta abre a caixa de diálogo da etiqueta

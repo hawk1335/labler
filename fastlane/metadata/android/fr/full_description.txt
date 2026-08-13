@@ -2,7 +2,7 @@ LaBLEr est une application pour imprimer sur les imprimantes thermiques d'étiqu
 
 Fonctions :
 
-* Texte multiligne (taille, gras/italique/souligné, alignement, plusieurs polices incluses), symboles et emojis, cadres, images importées, ainsi que codes QR et codes-barres (Code 128, EAN-13, UPC-A, Code 39, ITF) avec contenu QR typé pour liens, Wi-Fi, e-mail, téléphone et contacts.
+* Texte multiligne (taille, gras/italique/souligné, alignement, plusieurs polices incluses ainsi que vos propres fichiers TTF et OTF), symboles et emojis, cadres, images importées, ainsi que codes QR et codes-barres (Code 128, EAN-13, UPC-A, Code 39, ITF) avec contenu QR typé pour liens, Wi-Fi, e-mail, téléphone et contacts.
 * Un éditeur à manipulation directe : pincez pour zoomer et vous déplacer, faites glisser pour déplacer, redimensionner et pivoter, avec accrochage au centre, aux bords et aux autres éléments. Les graphismes sont rendus pour la tête thermique 1 bit sous forme d'un contour net (traçage de régions ou détection de contours Canny, avec un lissage et une inversion) ou avec un tramage par seuil, Floyd-Steinberg ou Atkinson.
 * Modèles : enregistrer, renommer, dupliquer, mettre en favori et rechercher ; exportez une étiquette au format JSON, ou sauvegardez et restaurez toute votre bibliothèque.
 * Des variables pour la date, l'heure, un numéro incrémental ou un texte libre demandé au moment de l'impression.

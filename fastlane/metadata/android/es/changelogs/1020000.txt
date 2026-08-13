@@ -1,0 +1,5 @@
+- Fuentes propias: añade archivos TTF y OTF en los ajustes y elígelos como fuente en el editor.
+  Si falta una fuente, se muestra una fuente predeterminada y se conserva la referencia original.
+- Arrastrar con doble toque mueve un elemento sin ajuste
+- El editor muestra el texto en la resolución de impresión
+- Tocar el tamaño de la etiqueta abre el diálogo de etiqueta

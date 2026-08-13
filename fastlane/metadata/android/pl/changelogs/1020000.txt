@@ -1,0 +1,5 @@
+- Własne czcionki: dodaj pliki TTF i OTF w ustawieniach i wybierz je jako czcionkę w edytorze.
+  Gdy czcionki brakuje, wyświetlana jest czcionka domyślna, a pierwotne odwołanie zostaje zachowane.
+- Przeciąganie po dwukrotnym dotknięciu przesuwa element bez przyciągania
+- Edytor pokazuje tekst w rozdzielczości druku
+- Dotknięcie rozmiaru etykiety otwiera okno etykiety

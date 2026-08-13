@@ -2,7 +2,7 @@ LaBLEr is een app om af te drukken op Bluetooth Low Energy thermische labelprint
 
 Functies:
 
-* Tekst over meerdere regels (grootte, vet/cursief/onderstreept, uitlijning, meerdere meegeleverde lettertypen), symbolen en emoji, kaders, geïmporteerde afbeeldingen, en QR-codes en barcodes (Code 128, EAN-13, UPC-A, Code 39, ITF) met getypeerde QR-inhoud voor links, wifi, e-mail, telefoon en contacten.
+* Tekst over meerdere regels (grootte, vet/cursief/onderstreept, uitlijning, meerdere meegeleverde lettertypen plus je eigen TTF- en OTF-bestanden), symbolen en emoji, kaders, geïmporteerde afbeeldingen, en QR-codes en barcodes (Code 128, EAN-13, UPC-A, Code 39, ITF) met getypeerde QR-inhoud voor links, wifi, e-mail, telefoon en contacten.
 * Een editor met directe bewerking: knijp om te zoomen en te verschuiven, sleep om te verplaatsen, formaat te wijzigen en te draaien, met uitlijnen op het midden, de randen en andere elementen. Afbeeldingen worden voor de 1-bits thermische kop weergegeven als een strak contour (regio's natrekken of Canny-randdetectie, met een verzachtingsstap en omkeren) of met drempel-, Floyd-Steinberg- of Atkinson-dithering.
 * Sjablonen: opslaan, hernoemen, dupliceren, als favoriet markeren en zoeken; exporteer één etiket als JSON-bestand, of maak een back-up van je hele bibliotheek en zet die terug.
 * Plaatshouders voor de datum, de tijd, een oplopend nummer of een vrije tekst waar bij het afdrukken om wordt gevraagd.

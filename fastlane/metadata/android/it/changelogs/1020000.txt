@@ -1,0 +1,5 @@
+- Caratteri personali: aggiungi file TTF e OTF nelle impostazioni e scegli il carattere nell'editor.
+  Se un carattere manca, viene mostrato un carattere predefinito e il riferimento originale resta.
+- Il trascinamento con doppio tocco sposta un elemento senza allineamento
+- L'editor mostra il testo alla risoluzione di stampa
+- Toccare la dimensione dell'etichetta apre la finestra dell'etichetta

@@ -1,0 +1,5 @@
+- Eigene Schriften: TTF- und OTF-Dateien in den Einstellungen hinzufügen und im Editor als Schriftart wählen.
+  Fehlt eine Schrift, wird eine Standardschrift angezeigt, der ursprüngliche Verweis bleibt erhalten.
+- Doppeltipp-Ziehen verschiebt ein Element ohne Einrasten
+- Editor zeigt Textelemente in Druckauflösung
+- Antippen der Labelgröße öffnet den Label-Dialog
