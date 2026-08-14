@@ -32,6 +32,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 import io.github.toolicious.labler.model.FrameElement
 import io.github.toolicious.labler.model.FrameStyle
 import io.github.toolicious.labler.model.LabelElement
@@ -40,6 +41,7 @@ import io.github.toolicious.labler.model.LabelTextAlign
 import io.github.toolicious.labler.model.TextElement
 import io.github.toolicious.labler.printer.MediaType
 import io.github.toolicious.labler.render.LabelRenderer
+import io.github.toolicious.labler.render.FontRegistry
 import io.github.toolicious.labler.render.MonoConverter
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.math.abs
@@ -108,7 +110,11 @@ fun EditorCanvas(
     // while it is being edited. That also keeps this bitmap valid while dragging or typing, because
     // only the selected element changes then.
     val others = elements.filter { it.id != selectedId }
-    val base = remember(spec, others) { MonoConverter.toBitmap(LabelRenderer.renderMono(spec, others)) }
+    // The revision is a key as well: custom fonts finish loading after startup, and this raster
+    // would otherwise keep showing the fallback until the element set happens to change.
+    val base = remember(spec, others, FontRegistry.revision) {
+        MonoConverter.toBitmap(LabelRenderer.renderMono(spec, others))
+    }
     // Nearest neighbor while magnifying (the normal case) shows the real dot pattern. A label may be
     // up to 500 mm = 4000 dots long and then no longer fits the canvas width; when shrinking, nearest
     // neighbor would swallow whole dot columns, so interpolate instead.
@@ -326,16 +332,22 @@ private suspend fun PointerInputScope.detectDragGesturesWithDoubleTap(
     onEnd()
 }
 
-/** Waits a moment for the second down of a double tap. */
+/** How far apart the two downs of a double tap may be before they count as separate gestures. */
+private val DOUBLE_TAP_SLOP = 48.dp
+
+/** Waits a moment for the second down of a double tap, close enough to the first to be one. */
 private suspend fun AwaitPointerEventScope.awaitSecondDown(
     first: PointerInputChange,
 ): PointerInputChange? = withTimeoutOrNull(viewConfiguration.doubleTapTimeoutMillis) {
     val minUptime = first.uptimeMillis + viewConfiguration.doubleTapMinTimeMillis
+    val slop = DOUBLE_TAP_SLOP.toPx()
     var change: PointerInputChange
     do {
         change = awaitFirstDown(requireUnconsumed = false)
     } while (change.uptimeMillis < minUptime)
-    change
+    // Timing alone is not enough: selecting one element and immediately dragging another would
+    // otherwise be read as a double tap and move that second element without snapping.
+    change.takeIf { (it.position - first.position).getDistance() <= slop }
 }
 
 private fun hitTest(lp: Offset, el: LabelElement): Boolean {

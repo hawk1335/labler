@@ -57,7 +57,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -101,7 +100,6 @@ import io.github.toolicious.labler.model.Symbology
 import io.github.toolicious.labler.model.TextElement
 import io.github.toolicious.labler.printer.dither.DitherMode
 import io.github.toolicious.labler.printer.dither.OutlineMethod
-import io.github.toolicious.labler.render.FontRegistry
 import io.github.toolicious.labler.render.LabelRenderer
 import io.github.toolicious.labler.ui.components.ClearButton
 import io.github.toolicious.labler.ui.components.labelFontFamily
@@ -210,26 +208,22 @@ fun EditorScreen(
                 .padding(horizontal = 12.dp)
                 .fillMaxSize()
         ) {
-            // Text metrics depend on which fonts are installed, so the canvas has to be rebuilt
-            // once a custom font finishes loading or the user adds or removes one.
-            key(FontRegistry.revision) {
-                EditorCanvas(
-                    spec = t.spec,
-                    elements = t.elements,
-                    selectedId = selectedId,
-                    guides = guides,
-                    onSelect = vm::select,
-                    onDragStart = vm::beginDrag,
-                    onDragBy = vm::dragBy,
-                    onDragEnd = vm::endDrag,
-                    onResizeStart = vm::beginResize,
-                    onResizeBy = vm::resizeSelectedBy,
-                    onResizeEnd = vm::endResize,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                )
-            }
+            EditorCanvas(
+                spec = t.spec,
+                elements = t.elements,
+                selectedId = selectedId,
+                guides = guides,
+                onSelect = vm::select,
+                onDragStart = vm::beginDrag,
+                onDragBy = vm::dragBy,
+                onDragEnd = vm::endDrag,
+                onResizeStart = vm::beginResize,
+                onResizeBy = vm::resizeSelectedBy,
+                onResizeEnd = vm::endResize,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            )
             // Only the label (canvas) stays fixed; everything below it scrolls. imePadding must come
             // BEFORE verticalScroll so it shrinks the scroll viewport to the keyboard edge (not just
             // the content); otherwise, with edge-to-edge, the viewport reaches behind the keyboard and
