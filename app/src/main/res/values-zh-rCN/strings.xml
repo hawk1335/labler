@@ -173,6 +173,9 @@
     <string name="settings_experimental">实验性</string>
     <string name="settings_experimental_hint">实验性打印机命令，未在 P15 上验证。仅在已连接打印机时使用；不确定就忽略。</string>
     <string name="exp_learn_gap">校准标签间隙</string>
+    <string name="exp_density_value">打印浓度：%1$s</string>
+    <string name="exp_density_off">关闭</string>
+    <string name="exp_density_hint">测试 P15 是否接受 0x1F 浓度命令。0 = 关闭（标准打印不变），1 到 15 = 更深。下次打印时生效。</string>
     <string name="settings_about">关于</string>
     <string name="about_text">LaBLEr %1$s\n\n通过 Bluetooth LE 用于 P15 标签打印机的独立 FOSS 应用。该协议是从 BleWebler 逆向工程得到的，BleWebler 是一个无需安装、在 Chrome 浏览器中运行的网页版。未使用任何代码。</string>
     <string name="scan_title">查找打印机</string>

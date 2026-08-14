@@ -173,6 +173,9 @@
     <string name="settings_experimental">Eksperymentalne</string>
     <string name="settings_experimental_hint">Eksperymentalne polecenia drukarki, niezweryfikowane na P15. Tylko przy podłączonej drukarce; w razie wątpliwości zignoruj.</string>
     <string name="exp_learn_gap">Kalibruj odstęp etykiet</string>
+    <string name="exp_density_value">Gęstość druku: %1$s</string>
+    <string name="exp_density_off">wyłączona</string>
+    <string name="exp_density_hint">Sprawdza, czy P15 przyjmuje polecenie gęstości 0x1F. 0 = wyłączona (standardowy druk bez zmian), od 1 do 15 = ciemniej. Działa od następnego wydruku.</string>
     <string name="settings_about">O aplikacji</string>
     <string name="about_text">LaBLEr %1$s\n\nNiezależna aplikacja FOSS do drukarki etykiet P15 przez Bluetooth LE. Protokół odtworzono metodą inżynierii wstecznej z BleWebler, wersji webowej dla przeglądarek Chrome działającej bez instalacji. Nie przejęto żadnego kodu.</string>
     <string name="scan_title">Szukaj drukarki</string>

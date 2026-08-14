@@ -173,6 +173,9 @@
     <string name="settings_experimental">Experimental</string>
     <string name="settings_experimental_hint">Comandos de impresora experimentales, no verificados en la P15. Solo con una impresora conectada; ignóralo si tienes dudas.</string>
     <string name="exp_learn_gap">Calibrar separación de etiquetas</string>
+    <string name="exp_density_value">Densidad de impresión: %1$s</string>
+    <string name="exp_density_off">desactivada</string>
+    <string name="exp_density_hint">Comprueba si la P15 acepta el comando de densidad 0x1F. 0 = desactivada (impresión estándar sin cambios), de 1 a 15 = más oscuro. Se aplica en la próxima impresión.</string>
     <string name="settings_about">Acerca de</string>
     <string name="about_text">LaBLEr %1$s\n\nAplicación FOSS independiente para la impresora de etiquetas P15 por Bluetooth LE. El protocolo se obtuvo mediante ingeniería inversa de BleWebler, una versión web para navegadores Chrome que funciona sin instalación. No se tomó ningún código.</string>
     <string name="scan_title">Buscar impresora</string>

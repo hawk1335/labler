@@ -173,6 +173,9 @@
     <string name="settings_experimental">実験的</string>
     <string name="settings_experimental_hint">実験的なプリンターコマンドで、P15では未検証です。プリンター接続時のみ。不明なら無視してください。</string>
     <string name="exp_learn_gap">ラベル間隔を調整</string>
+    <string name="exp_density_value">印刷濃度: %1$s</string>
+    <string name="exp_density_off">オフ</string>
+    <string name="exp_density_hint">P15 が 0x1F 濃度コマンドを受け付けるか試します。0 = オフ（標準の印刷のまま）、1 から 15 = より濃く。次回の印刷から反映されます。</string>
     <string name="settings_about">このアプリについて</string>
     <string name="about_text">LaBLEr %1$s\n\nBluetooth LE 経由の P15 ラベルプリンター用の独立した FOSS アプリです。プロトコルは、インストール不要で Chrome ブラウザーで動作するウェブ版 BleWebler からリバースエンジニアリングして得たものです。コードは一切流用していません。</string>
     <string name="scan_title">プリンターを探す</string>

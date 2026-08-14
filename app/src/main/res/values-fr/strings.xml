@@ -173,6 +173,9 @@
     <string name="settings_experimental">Expérimental</string>
     <string name="settings_experimental_hint">Commandes d\'imprimante expérimentales, non vérifiées sur le P15. Uniquement avec une imprimante connectée ; ignorez en cas de doute.</string>
     <string name="exp_learn_gap">Calibrer l\'écart des étiquettes</string>
+    <string name="exp_density_value">Densité d\'impression : %1$s</string>
+    <string name="exp_density_off">désactivée</string>
+    <string name="exp_density_hint">Teste si la P15 accepte la commande de densité 0x1F. 0 = désactivée (impression standard inchangée), 1 à 15 = plus foncé. Prend effet à la prochaine impression.</string>
     <string name="settings_about">À propos</string>
     <string name="about_text">LaBLEr %1$s\n\nApplication FOSS indépendante pour l\'imprimante d\'étiquettes P15 via Bluetooth LE. Le protocole a été rétro-conçu à partir de BleWebler, une version web pour navigateurs Chrome qui fonctionne sans installation. Aucun code n\'a été repris.</string>
     <string name="scan_title">Rechercher une imprimante</string>
