@@ -29,10 +29,10 @@ android {
         // patch*100 + build, where build 0 = release (code ends in "00") and 01..99 are test/beta
         // builds above it; name is "major.minor.patch" (plus "-devNN" for a test build). Written as
         // literals, not computed, so F-Droid can parse them for automatic update detection. Update
-        // both by hand when bumping. 1.1.0 = 1*1_000_000 + 1*10_000 + 0*100 + 0 = 1010000;
-        // the first local change after a release becomes a dev build, 1.1.0-dev01 = 1010001.
-        versionCode = 1010001
-        versionName = "1.1.0-dev01"
+        // both by hand when bumping. 1.2.0 = 1*1_000_000 + 2*10_000 + 0*100 + 0 = 1020000;
+        // the first local change after a release becomes a dev build, 1.2.0-dev01 = 1020001.
+        versionCode = 1020000
+        versionName = "1.2.0"
         manifestPlaceholders["appName"] = "LaBLEr"
     }
 
