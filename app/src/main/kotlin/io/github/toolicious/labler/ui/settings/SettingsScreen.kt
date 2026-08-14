@@ -52,6 +52,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.toolicious.labler.BuildConfig
 import io.github.toolicious.labler.R
 import io.github.toolicious.labler.ble.BlePermissions
 import io.github.toolicious.labler.ble.PrinterState
@@ -221,30 +222,35 @@ fun SettingsScreen(
                 Text(it, style = MaterialTheme.typography.bodySmall)
             }
 
-            Spacer(Modifier.height(16.dp))
-            val savedDensity by vm.printDensity.collectAsState()
-            // Local slider position; persisted only when the drag ends, so DataStore is not
-            // hammered on every tick. remember(savedDensity) re-syncs if it changes elsewhere.
-            var densitySlider by remember(savedDensity) { mutableFloatStateOf(savedDensity.toFloat()) }
-            val densityLevel = densitySlider.roundToInt()
-            val densityText =
-                if (densityLevel == 0) stringResource(R.string.exp_density_off) else densityLevel.toString()
-            Text(
-                stringResource(R.string.exp_density_value, densityText),
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Slider(
-                value = densitySlider,
-                onValueChange = { densitySlider = it },
-                onValueChangeFinished = { vm.setPrintDensity(densitySlider.roundToInt()) },
-                valueRange = 0f..15f,
-                steps = 14,
-            )
-            Text(
-                stringResource(R.string.exp_density_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            // Debug builds only: the 0x1F density command is documented but still unverified on
+            // the P15, so it stays a probe for development instead of something a release offers.
+            // The protocol side is untouched, and a level saved in a debug build keeps working.
+            if (BuildConfig.DEBUG) {
+                Spacer(Modifier.height(16.dp))
+                val savedDensity by vm.printDensity.collectAsState()
+                // Local slider position; persisted only when the drag ends, so DataStore is not
+                // hammered on every tick. remember(savedDensity) re-syncs if it changes elsewhere.
+                var densitySlider by remember(savedDensity) { mutableFloatStateOf(savedDensity.toFloat()) }
+                val densityLevel = densitySlider.roundToInt()
+                val densityText =
+                    if (densityLevel == 0) stringResource(R.string.exp_density_off) else densityLevel.toString()
+                Text(
+                    stringResource(R.string.exp_density_value, densityText),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Slider(
+                    value = densitySlider,
+                    onValueChange = { densitySlider = it },
+                    onValueChangeFinished = { vm.setPrintDensity(densitySlider.roundToInt()) },
+                    valueRange = 0f..15f,
+                    steps = 14,
+                )
+                Text(
+                    stringResource(R.string.exp_density_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
             Spacer(Modifier.height(24.dp))
         }
