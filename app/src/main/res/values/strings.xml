@@ -2,285 +2,284 @@
 <resources>
     <string name="app_name">LaBLEr</string>
 
-    <!-- Aktionen -->
-    <string name="action_cancel">Abbrechen</string>
-    <string name="action_save">Speichern</string>
-    <string name="action_create">Erstellen</string>
-    <string name="action_print">Drucken</string>
-    <string name="action_connect">Verbinden</string>
-    <string name="action_grant_permission">Berechtigung erteilen</string>
-    <string name="action_disconnect">Trennen</string>
-    <string name="action_forget">Vergessen</string>
-    <string name="forget_title">Drucker vergessen?</string>
-    <string name="forget_message">%1$s wird nicht mehr gemerkt und nicht mehr automatisch verbunden.</string>
-    <string name="action_clear">Leeren</string>
-    <string name="action_import_file">Oder aus Datei importieren …</string>
+    <!-- Actions -->
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="action_create">Create</string>
+    <string name="action_print">Print</string>
+    <string name="action_connect">Connect</string>
+    <string name="action_grant_permission">Grant permission</string>
+    <string name="action_disconnect">Disconnect</string>
+    <string name="action_forget">Forget</string>
+    <string name="forget_title">Forget printer?</string>
+    <string name="forget_message">%1$s will no longer be remembered or auto-connected.</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_import_file">Or import from a file …</string>
     <string name="action_import">Import</string>
 
-    <!-- Symbolbeschreibungen -->
-    <string name="cd_back">Zurück</string>
-    <string name="cd_settings">Einstellungen</string>
-    <string name="cd_history">Druckverlauf</string>
-    <string name="cd_new_label">Neues Label</string>
-    <string name="cd_favorite">Favorit</string>
-    <string name="cd_menu">Menü</string>
-    <string name="cd_clear">Leeren</string>
-    <string name="cd_delete">Löschen</string>
-    <string name="cd_rotate">Drehen</string>
-    <string name="cd_print">Drucken</string>
-    <string name="cd_undo">Rückgängig</string>
-    <string name="cd_redo">Wiederholen</string>
+    <!-- Content descriptions -->
+    <string name="cd_back">Back</string>
+    <string name="cd_settings">Settings</string>
+    <string name="cd_history">Print history</string>
+    <string name="cd_new_label">New label</string>
+    <string name="cd_favorite">Favorite</string>
+    <string name="cd_menu">Menu</string>
+    <string name="cd_clear">Clear</string>
+    <string name="cd_delete">Delete</string>
+    <string name="cd_rotate">Rotate</string>
+    <string name="cd_print">Print</string>
+    <string name="cd_undo">Undo</string>
+    <string name="cd_redo">Redo</string>
 
     <!-- Home -->
-    <string name="home_search_hint">Suchen</string>
-    <string name="home_empty">Noch keine Labels.\nLege mit + dein erstes an.</string>
-    <string name="home_no_results">Keine Treffer.</string>
+    <string name="home_search_hint">Search</string>
+    <string name="home_empty">No labels yet.\nTap + to create your first.</string>
+    <string name="home_no_results">No matches.</string>
     <string name="template_size">%1$d x %2$d mm</string>
-    <string name="menu_edit">Bearbeiten</string>
-    <string name="menu_duplicate">Duplizieren</string>
-    <string name="menu_export">Exportieren</string>
-    <string name="menu_delete">Löschen</string>
-    <string name="default_label_name">Neues Label</string>
-    <string name="duplicate_name">%1$s (Kopie)</string>
-    <string name="toast_export_failed">Export fehlgeschlagen: %1$s</string>
-    <string name="toast_export_ok">Exportiert.</string>
-    <string name="toast_import_failed">Import fehlgeschlagen: %1$s</string>
-    <string name="delete_title">Label löschen?</string>
-    <string name="delete_message">%1$s wird dauerhaft gelöscht.</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_duplicate">Duplicate</string>
+    <string name="menu_export">Export</string>
+    <string name="menu_delete">Delete</string>
+    <string name="default_label_name">New label</string>
+    <string name="duplicate_name">%1$s (Copy)</string>
+    <string name="toast_export_failed">Export failed: %1$s</string>
+    <string name="toast_export_ok">Exported.</string>
+    <string name="toast_import_failed">Import failed: %1$s</string>
+    <string name="delete_title">Delete label?</string>
+    <string name="delete_message">%1$s will be permanently deleted.</string>
 
-    <!-- Label-Dialog -->
-    <string name="dialog_new_title">Neues Label</string>
-    <string name="dialog_edit_title">Label bearbeiten</string>
+    <!-- Label dialog -->
+    <string name="dialog_new_title">New label</string>
+    <string name="dialog_edit_title">Edit label</string>
     <string name="field_name">Name</string>
-    <string name="size_hint">Größe (Bandbreite x Länge):</string>
-    <string name="preset_custom">Eigene …</string>
-    <string name="field_tape_mm">Band (mm)</string>
-    <string name="field_length_mm">Länge (mm)</string>
-    <string name="media_die_cut">Stanz-Etikett</string>
-    <string name="media_continuous">Endlos</string>
+    <string name="size_hint">Size (tape width x length):</string>
+    <string name="preset_custom">Custom …</string>
+    <string name="field_tape_mm">Tape (mm)</string>
+    <string name="field_length_mm">Length (mm)</string>
+    <string name="media_die_cut">Die-cut label</string>
+    <string name="media_continuous">Continuous</string>
 
     <!-- Editor -->
-    <string name="group_add">Hinzufügen</string>
-    <string name="group_elements">Elemente</string>
+    <string name="group_add">Add</string>
+    <string name="group_elements">Elements</string>
     <string name="add_text">Text</string>
     <string name="add_symbol">Symbol</string>
-    <string name="add_frame">Rahmen</string>
-    <string name="element_frame">Rahmen</string>
-    <string name="editor_hint">Elemente auf dem Label hinzufügen, direkt oder über die Liste auswählen, verschieben und über die Ecke skalieren.</string>
-    <string name="editor_hint_free_move">Doppelt tippen und den zweiten Tipp gedrückt halten bewegt frei, ohne Einrasten.</string>
+    <string name="add_frame">Frame</string>
+    <string name="element_frame">Frame</string>
+    <string name="editor_hint">Add elements to the label, select directly or from the list, move them, and resize from the corner.</string>
+    <string name="editor_hint_free_move">Double tap and keep the second tap held to move freely, without snapping.</string>
     <string name="group_format">Format</string>
-    <string name="group_align">Ausrichtung</string>
-    <string name="group_variables">Variablen</string>
-    <string name="group_symbol">Symbol wählen</string>
-    <string name="group_raster">Rasterung</string>
-    <string name="raster_hint">Nur bei mehrfarbigen Emoji sichtbar.</string>
+    <string name="group_align">Alignment</string>
+    <string name="group_variables">Variables</string>
+    <string name="group_symbol">Pick a symbol</string>
+    <string name="group_raster">Dithering</string>
+    <string name="raster_hint">Only visible for multicolor emoji.</string>
     <string name="prop_text">Text</string>
-    <string name="prop_size">Größe</string>
-    <string name="prop_bold">Fett</string>
-    <string name="prop_italic">Kursiv</string>
-    <string name="prop_underline">Unterstrichen</string>
-    <string name="align_left">Links</string>
-    <string name="align_center">Mitte</string>
-    <string name="align_right">Rechts</string>
-    <string name="group_font">Schriftart</string>
+    <string name="prop_size">Size</string>
+    <string name="prop_bold">Bold</string>
+    <string name="prop_italic">Italic</string>
+    <string name="prop_underline">Underline</string>
+    <string name="align_left">Left</string>
+    <string name="align_center">Center</string>
+    <string name="align_right">Right</string>
+    <string name="group_font">Font</string>
     <string name="font_sans">Sans</string>
     <string name="font_serif">Serif</string>
     <string name="font_mono">Mono</string>
-    <string name="prop_symbol">Symbol/Emoji</string>
-    <string name="dither_threshold">Schwelle</string>
+    <string name="prop_symbol">Symbol/emoji</string>
+    <string name="dither_threshold">Threshold</string>
     <string name="dither_fs">Floyd-Steinberg</string>
     <string name="dither_atkinson">Atkinson</string>
-    <string name="dither_outline">Kontur</string>
-    <string name="frame_rect">Rahmen</string>
-    <string name="frame_round">Rund</string>
-    <string name="frame_line_h">Linie −</string>
-    <string name="frame_line_v">Linie |</string>
-    <string name="prop_stroke">Strichstärke</string>
-    <string name="prop_radius">Eckenradius</string>
-    <string name="prop_contrast">Kontrast</string>
-    <string name="prop_outline_detail">Empfindlichkeit</string>
-    <string name="prop_line_width">Liniendicke</string>
-    <string name="prop_outline_style">Stil</string>
-    <string name="outline_lines">Grafik</string>
-    <string name="outline_canny">Foto</string>
-    <string name="outline_smooth">Glätten</string>
-    <string name="prop_width">Breite</string>
-    <string name="prop_height">Höhe</string>
+    <string name="dither_outline">Outline</string>
+    <string name="frame_rect">Frame</string>
+    <string name="frame_round">Rounded</string>
+    <string name="frame_line_h">Line −</string>
+    <string name="frame_line_v">Line |</string>
+    <string name="prop_stroke">Stroke</string>
+    <string name="prop_radius">Corner radius</string>
+    <string name="prop_contrast">Contrast</string>
+    <string name="prop_outline_detail">Sensitivity</string>
+    <string name="prop_line_width">Line thickness</string>
+    <string name="prop_outline_style">Style</string>
+    <string name="outline_lines">Graphic</string>
+    <string name="outline_canny">Photo</string>
+    <string name="outline_smooth">Smooth</string>
+    <string name="prop_width">Width</string>
+    <string name="prop_height">Height</string>
     <string name="var_date">date</string>
     <string name="var_time">time</string>
     <string name="var_number">#</string>
     <string name="var_var">var</string>
-    <string name="symbol_current">Aktuelles Symbol</string>
-    <string name="action_choose_symbol">Symbol wählen …</string>
-    <string name="symbol_field">Emoji oder Zeichen</string>
-    <string name="symbol_keyboard_hint">Für Emojis die Emoji-Taste deiner Tastatur nutzen, oder unten ein Symbol wählen.</string>
-    <string name="action_done">Fertig</string>
-    <string name="cat_arrows">Pfeile</string>
-    <string name="cat_shapes">Formen</string>
-    <string name="cat_stars">Sterne</string>
-    <string name="cat_signs">Zeichen</string>
-    <string name="cat_tech">Technik &amp; Büro</string>
-    <string name="cat_weather">Wetter &amp; Natur</string>
-    <string name="cat_math">Mathematik</string>
-    <string name="cat_misc">Verschiedenes</string>
-    <string name="tab_symbols">Symbole</string>
+    <string name="symbol_current">Current symbol</string>
+    <string name="action_choose_symbol">Choose symbol …</string>
+    <string name="symbol_field">Emoji or character</string>
+    <string name="symbol_keyboard_hint">For emoji use your keyboard\'s emoji key, or pick a symbol below.</string>
+    <string name="action_done">Done</string>
+    <string name="cat_arrows">Arrows</string>
+    <string name="cat_shapes">Shapes</string>
+    <string name="cat_stars">Stars</string>
+    <string name="cat_signs">Signs</string>
+    <string name="cat_tech">Tech &amp; office</string>
+    <string name="cat_weather">Weather &amp; nature</string>
+    <string name="cat_math">Math</string>
+    <string name="cat_misc">Misc</string>
+    <string name="tab_symbols">Symbols</string>
     <string name="tab_emojis">Emojis</string>
     <string name="cat_smileys">Smileys</string>
-    <string name="cat_animals">Tiere &amp; Natur</string>
-    <string name="cat_food">Essen</string>
-    <string name="cat_activity">Aktivität &amp; Reisen</string>
-    <string name="cat_objects">Objekte</string>
-    <string name="cat_hearts">Herzen &amp; Symbole</string>
+    <string name="cat_animals">Animals &amp; nature</string>
+    <string name="cat_food">Food</string>
+    <string name="cat_activity">Activity &amp; travel</string>
+    <string name="cat_objects">Objects</string>
+    <string name="cat_hearts">Hearts &amp; symbols</string>
 
-    <!-- Druck-Dialog -->
-    <string name="print_title">Drucken: %1$s</string>
-    <string name="print_preview">Vorschau (%1$d mm, 1-Bit wie gedruckt):</string>
-    <string name="print_paper">Papier:</string>
-    <string name="print_copies">Kopien:</string>
-    <string name="print_counter_start">Nr. startet bei %1$d</string>
-    <string name="print_need_printer">Zum Drucken muss ein Drucker verbunden sein.</string>
-    <string name="perm_bluetooth_missing">Bluetooth-Berechtigung fehlt. Ohne sie kann kein Drucker verbunden werden.</string>
-    <string name="print_printer_settings">Druckereinstellungen</string>
-    <string name="print_label_progress">Etikett %1$d/%2$d</string>
+    <!-- Print dialog -->
+    <string name="print_title">Print: %1$s</string>
+    <string name="print_preview">Preview (%1$d mm, 1-bit as printed):</string>
+    <string name="print_paper">Paper:</string>
+    <string name="print_copies">Copies:</string>
+    <string name="print_counter_start">No. starts at %1$d</string>
+    <string name="print_need_printer">A printer must be connected to print.</string>
+    <string name="perm_bluetooth_missing">Bluetooth permission is missing. Without it no printer can connect.</string>
+    <string name="print_printer_settings">Printer settings</string>
+    <string name="print_label_progress">Label %1$d/%2$d</string>
 
-    <!-- Einstellungen -->
-    <string name="settings_title">Einstellungen</string>
-    <string name="settings_printer">Drucker</string>
-    <string name="status_disconnected">Nicht verbunden</string>
-    <string name="status_connecting">Verbindet (Versuch %1$d/3) …</string>
-    <string name="status_ready">Verbunden: %1$s</string>
-    <string name="status_ready_battery">Verbunden: %1$s, Batterie %2$d %%</string>
-    <string name="status_printing">Druckt (%1$d %%)</string>
-    <string name="status_error">Fehler: %1$s</string>
-    <string name="settings_saved">Gemerkt: %1$s (%2$s)</string>
-    <string name="info_model">Modell: %1$s</string>
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_printer">Printer</string>
+    <string name="status_disconnected">Not connected</string>
+    <string name="status_connecting">Connecting (attempt %1$d/3) …</string>
+    <string name="status_ready">Connected: %1$s</string>
+    <string name="status_ready_battery">Connected: %1$s, battery %2$d %%</string>
+    <string name="status_printing">Printing (%1$d %%)</string>
+    <string name="status_error">Error: %1$s</string>
+    <string name="settings_saved">Saved: %1$s (%2$s)</string>
+    <string name="info_model">Model: %1$s</string>
     <string name="info_firmware">Firmware: %1$s</string>
-    <string name="info_serial">Seriennummer: %1$s</string>
+    <string name="info_serial">Serial number: %1$s</string>
     <string name="info_hardware">Hardware: %1$s</string>
 
-    <!-- Schriften -->
-    <string name="settings_fonts">Schriften</string>
-    <string name="fonts_manage">Eigene Schriften verwalten</string>
-    <string name="fonts_title">Schriften verwalten</string>
-    <string name="fonts_add">Schrift hinzufügen</string>
-    <string name="fonts_empty">Noch keine eigenen Schriften. Über „+“ oben lassen sich TTF- und OTF-Dateien vom Gerät hinzufügen.</string>
-    <string name="fonts_source">Datei: %1$s</string>
-    <string name="fonts_rename">Umbenennen</string>
-    <string name="fonts_rename_title">Anzeigename</string>
-    <string name="fonts_rename_hint">Leer lassen, um wieder den Namen aus der Schriftdatei zu verwenden.</string>
-    <string name="fonts_replace">Datei ersetzen</string>
-    <string name="fonts_delete">Entfernen</string>
-    <string name="fonts_delete_title">„%1$s“ entfernen?</string>
-    <string name="fonts_delete_message">Vorlagen behalten den Verweis und zeigen die Schrift wieder an, sobald sie erneut hinzugefügt wird.</string>
-    <string name="fonts_missing_hint">Schrift „%1$s“ fehlt, es wird eine Standardschrift angezeigt.</string>
-    <string name="toast_font_added">%1$s hinzugefügt</string>
-    <string name="toast_fonts_added">%1$d Schriften hinzugefügt</string>
-    <string name="toast_fonts_added_partial">%1$d von %2$d Schriften hinzugefügt</string>
-    <string name="err_font_invalid">Keine gültige Schriftdatei</string>
-    <string name="err_font_too_large">Schriftdatei ist zu groß (max. 32 MB)</string>
-    <string name="err_font_duplicate">„%1$s“ ist bereits vorhanden</string>
+    <!-- Fonts -->
+    <string name="settings_fonts">Fonts</string>
+    <string name="fonts_manage">Manage custom fonts</string>
+    <string name="fonts_title">Manage fonts</string>
+    <string name="fonts_add">Add font</string>
+    <string name="fonts_empty">No custom fonts yet. Use \"+\" above to add TTF or OTF files from your device.</string>
+    <string name="fonts_source">File: %1$s</string>
+    <string name="fonts_rename">Rename</string>
+    <string name="fonts_rename_title">Display name</string>
+    <string name="fonts_rename_hint">Leave empty to use the name from the font file again.</string>
+    <string name="fonts_replace">Replace file</string>
+    <string name="fonts_delete">Remove</string>
+    <string name="fonts_delete_title">Remove \"%1$s\"?</string>
+    <string name="fonts_delete_message">Templates keep the reference and will show the font again once it is added back.</string>
+    <string name="fonts_missing_hint">Font \"%1$s\" is missing, a default font is shown instead.</string>
+    <string name="toast_font_added">%1$s added</string>
+    <string name="toast_fonts_added">%1$d fonts added</string>
+    <string name="toast_fonts_added_partial">%1$d of %2$d fonts added</string>
+    <string name="err_font_invalid">Not a valid font file</string>
+    <string name="err_font_too_large">Font file is too large (max. 32 MB)</string>
+    <string name="err_font_duplicate">\"%1$s\" is already added</string>
 
-    <string name="settings_diagnostics">Diagnose</string>
-    <string name="settings_testtools">Testdruck-Werkzeuge (Geometrie-Muster)</string>
-    <string name="settings_experimental">Experimentell</string>
-    <string name="settings_experimental_hint">Experimentelle Druckerbefehle, am P15 nicht verifiziert. Nur bei verbundenem Drucker; im Zweifel einfach ignorieren.</string>
-    <string name="exp_learn_gap">Banderkennung anlernen</string>
-    <string name="exp_density_value">Druckdichte: %1$s</string>
-    <string name="exp_density_off">aus</string>
-    <string name="exp_density_hint">Testet, ob der P15 den 0x1F-Dichtebefehl annimmt. 0 = aus (Standarddruck unverändert), 1 bis 15 = dunkler. Wirkt beim nächsten Druck.</string>
-    <string name="settings_about">Über</string>
-    <string name="about_text">LaBLEr %1$s\n\nEigenständige FOSS-App für den P15-Labeldrucker über Bluetooth LE. Das Protokoll wurde aus BleWebler reverse-engineert, einer Web-Version für Chrome-Browser ohne Installation. Kein Code übernommen.</string>
+    <string name="settings_diagnostics">Diagnostics</string>
+    <string name="settings_testtools">Test print tools (geometry pattern)</string>
+    <string name="settings_experimental">Experimental</string>
+    <string name="settings_experimental_hint">Experimental printer commands, not verified on the P15. Only with a connected printer; ignore if unsure.</string>
+    <string name="exp_learn_gap">Calibrate label gap</string>
+    <string name="exp_density_value">Print density: %1$s</string>
+    <string name="exp_density_off">off</string>
+    <string name="exp_density_hint">Tests whether the P15 accepts the 0x1F density command. 0 = off (standard printing unchanged), 1 to 15 = darker. Takes effect on the next print.</string>
+    <string name="settings_about">About</string>
+    <string name="about_text">LaBLEr %1$s\n\nIndependent FOSS app for the P15 label printer over Bluetooth LE. The protocol was reverse-engineered from BleWebler, a web version for Chrome browsers that runs without installation. No code was taken.</string>
     <string name="about_link" translatable="false">https://github.com/josb25/BleWebler</string>
-    <string name="scan_title">Drucker suchen</string>
-    <string name="scan_show_all">Alle Bluetooth-Geräte anzeigen</string>
-    <string name="scan_empty">Nichts gefunden. Drucker eingeschaltet?</string>
+    <string name="scan_title">Find printer</string>
+    <string name="scan_show_all">Show all Bluetooth devices</string>
+    <string name="scan_empty">Nothing found. Is the printer on?</string>
     <string name="scan_device_line">%1$s  (RSSI %2$d)</string>
 
-    <!-- Status-Chip -->
-    <string name="chip_no_printer">Kein Drucker</string>
-    <string name="chip_connecting">Verbindet (%1$d/3)</string>
-    <string name="chip_printing">Druckt %1$d %%</string>
-    <string name="chip_error">Fehler</string>
-    <string name="chip_permission">BT-Berechtigung fehlt</string>
+    <!-- Status chip -->
+    <string name="chip_no_printer">No printer</string>
+    <string name="chip_connecting">Connecting (%1$d/3)</string>
+    <string name="chip_printing">Printing %1$d %%</string>
+    <string name="chip_error">Error</string>
+    <string name="chip_permission">BT permission needed</string>
 
-    <!-- Testdruck -->
-    <string name="testprint_title">Testdruck</string>
-    <string name="testprint_geometry">Geometrie-Testmuster (40 mm)</string>
-    <string name="testprint_text_label">Text-Probedruck</string>
-    <string name="testprint_show">Vorschau anzeigen</string>
+    <!-- Test print -->
+    <string name="testprint_title">Test print</string>
+    <string name="testprint_geometry">Geometry test pattern (40 mm)</string>
+    <string name="testprint_text_label">Text sample</string>
+    <string name="testprint_show">Show preview</string>
 
-    <!-- Verlauf -->
-    <string name="history_title">Druckverlauf</string>
-    <string name="history_empty">Noch nichts gedruckt.</string>
+    <!-- History -->
+    <string name="history_title">Print history</string>
+    <string name="history_empty">Nothing printed yet.</string>
     <string name="history_meta">%1$s · %2$d× · %3$d x %4$d mm</string>
 
-    <!-- Info-Dialog / App-Sprache -->
+    <!-- Info dialog / app language -->
     <string name="cd_info">Info</string>
-    <string name="action_close">Schließen</string>
+    <string name="action_close">Close</string>
     <string name="about_version">Version %1$s</string>
-    <string name="about_description">LaBLEr ist eine Etiketten-App für Bluetooth-Low-Energy Thermo-Labeldrucker der Marklife-Familie (P15, P12, L13). Gestalte eigene Etiketten direkt vom Handy mit Text, Symbolen und Rahmen, speichere sie als Vorlage und drucke sie jederzeit wieder.</string>
-    <string name="about_source">Quellcode &amp; Hilfe</string>
-    <string name="about_repo" translatable="false">https://github.com/toolicious/labler</string>
-    <string name="about_thanks">Danke an die quelloffene Chrome-Web-App %1$s, die das P15-Protokoll zugänglich gemacht hat.</string>
-    <string name="about_license">Lizenz: GPL-3.0-or-later</string>
-    <string name="app_language">Sprache</string>
-    <string name="app_language_title">Sprache</string>
-    <string name="app_language_system">System (automatisch)</string>
+    <string name="about_description">LaBLEr is a label printer app for Bluetooth Low Energy thermal label printers of the Marklife family (P15, P12, L13). Design your own labels right on your phone with text, symbols and frames, save them as templates and print them again anytime.</string>
+    <string name="about_source">Source code &amp; help</string>
+    <string name="about_thanks">Thanks to the open-source Chrome web app %1$s, which made the P15 protocol accessible.</string>
+    <string name="about_license">License: GPL-3.0-or-later</string>
+    <string name="app_language">Language</string>
+    <string name="app_language_title">Language</string>
+    <string name="app_language_system">System (automatic)</string>
 
+    <!-- Backend error messages -->
+    <string name="err_no_bluetooth">This device has no Bluetooth</string>
+    <string name="err_bt_off">Bluetooth is off</string>
+    <string name="err_no_printer_found">No printer found. Is it on and in range?</string>
+    <string name="err_connect_failed">Connection failed</string>
+    <string name="err_not_connected">No printer connected</string>
+    <string name="err_print_failed">Printing failed</string>
+    <string name="err_file_not_writable">File not writable</string>
+    <string name="err_file_not_readable">File not readable</string>
+    <string name="err_file_invalid">Invalid file</string>
+    <string name="err_no_scanner">BLE scanner unavailable</string>
     <!-- Barcode / QR -->
     <string name="add_barcode">Code</string>
-    <string name="prop_barcode_data">Inhalt</string>
-    <string name="prop_barcode_type">Typ</string>
-    <string name="prop_barcode_caption">Text anzeigen</string>
+    <string name="prop_barcode_data">Content</string>
+    <string name="prop_barcode_type">Type</string>
+    <string name="prop_barcode_caption">Show text</string>
 
-    <!-- QR-Inhalt -->
-    <string name="qr_content">QR-Inhalt</string>
+    <!-- QR content -->
+    <string name="qr_content">QR content</string>
     <string name="qr_type_text">Text</string>
     <string name="qr_type_link">Link</string>
-    <string name="qr_type_wifi">WLAN</string>
-    <string name="qr_type_email">E-Mail</string>
-    <string name="qr_type_phone">Telefon</string>
-    <string name="qr_type_contact">Kontakt</string>
+    <string name="qr_type_wifi">Wi-Fi</string>
+    <string name="qr_type_email">Email</string>
+    <string name="qr_type_phone">Phone</string>
+    <string name="qr_type_contact">Contact</string>
     <string name="qr_url">URL</string>
-    <string name="qr_ssid">Netzwerkname</string>
-    <string name="qr_password">Passwort</string>
-    <string name="qr_password_hint">Optional. Wird im Klartext im QR-Code und in der Vorlage gespeichert.</string>
-    <string name="qr_show_password">Passwort anzeigen</string>
-    <string name="qr_auth">Verschlüsselung</string>
-    <string name="qr_auth_none">Keine</string>
-    <string name="qr_hidden">Verstecktes Netz</string>
-    <string name="qr_email_addr">E-Mail-Adresse</string>
-    <string name="qr_subject">Betreff (optional)</string>
-    <string name="qr_phone">Telefonnummer</string>
-    <string name="qr_wifi_pw_error_wpa">8 bis 63 Zeichen</string>
-    <string name="qr_wifi_pw_error_wep">5 oder 13 Zeichen</string>
+    <string name="qr_ssid">Network name (SSID)</string>
+    <string name="qr_password">Password</string>
+    <string name="qr_password_hint">Optional. Stored in plain text in the QR code and the template.</string>
+    <string name="qr_show_password">Show password</string>
+    <string name="qr_auth">Encryption</string>
+    <string name="qr_auth_none">None</string>
+    <string name="qr_hidden">Hidden network</string>
+    <string name="qr_email_addr">Email address</string>
+    <string name="qr_subject">Subject (optional)</string>
+    <string name="qr_phone">Phone number</string>
+    <string name="qr_wifi_pw_error_wpa">8 to 63 characters</string>
+    <string name="qr_wifi_pw_error_wep">5 or 13 characters</string>
 
-    <!-- Bild -->
-    <string name="add_image">Bild</string>
-    <string name="prop_invert">Invertieren</string>
-    <string name="prop_image_threshold">Schwellwert</string>
-    <string name="group_scale">Skalieren</string>
+    <!-- Image -->
+    <string name="add_image">Image</string>
+    <string name="prop_invert">Invert</string>
+    <string name="prop_image_threshold">Threshold</string>
+    <string name="group_scale">Scale</string>
 
     <!-- Backup -->
     <string name="backup">Backup</string>
-    <string name="backup_export">Exportieren</string>
-    <string name="backup_import">Importieren</string>
-    <string name="backup_replace_title">Backup importieren</string>
-    <string name="backup_replace_message">Vorhandene Labels ersetzen oder die importierten zusätzlich hinzufügen?</string>
-    <string name="backup_replace">Ersetzen</string>
-    <string name="backup_add">Hinzufügen</string>
-    <string name="backup_ok">Backup abgeschlossen.</string>
-    <string name="backup_failed">Backup fehlgeschlagen.</string>
-
-    <!-- Fehlermeldungen (Backend) -->
-    <string name="err_no_bluetooth">Dieses Gerät hat kein Bluetooth</string>
-    <string name="err_bt_off">Bluetooth ist ausgeschaltet</string>
-    <string name="err_no_printer_found">Kein Drucker gefunden. Eingeschaltet und in Reichweite?</string>
-    <string name="err_connect_failed">Verbindung fehlgeschlagen</string>
-    <string name="err_not_connected">Kein Drucker verbunden</string>
-    <string name="err_print_failed">Druck fehlgeschlagen</string>
-    <string name="err_file_not_writable">Datei nicht beschreibbar</string>
-    <string name="err_file_not_readable">Datei nicht lesbar</string>
-    <string name="err_file_invalid">Ungültige Datei</string>
-    <string name="err_no_scanner">BLE-Scanner nicht verfügbar</string>
+    <string name="backup_export">Export</string>
+    <string name="backup_import">Import</string>
+    <string name="backup_replace_title">Import backup</string>
+    <string name="backup_replace_message">Replace existing labels or add the imported ones?</string>
+    <string name="backup_replace">Replace</string>
+    <string name="backup_add">Add</string>
+    <string name="backup_ok">Backup done.</string>
+    <string name="backup_failed">Backup failed.</string>
+    <string name="about_repo" translatable="false">https://github.com/toolicious/labler</string>
 </resources>
