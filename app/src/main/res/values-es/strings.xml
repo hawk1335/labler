@@ -165,6 +165,7 @@
     <string name="toast_fonts_added">%1$d fuentes añadidas</string>
     <string name="toast_fonts_added_partial">%1$d de %2$d fuentes añadidas</string>
     <string name="err_font_invalid">No es un archivo de fuente válido</string>
+    <string name="err_font_too_large">El archivo de fuente es demasiado grande (máx. 32 MB)</string>
     <string name="err_font_duplicate">«%1$s» ya está añadida</string>
 
     <string name="settings_diagnostics">Diagnóstico</string>

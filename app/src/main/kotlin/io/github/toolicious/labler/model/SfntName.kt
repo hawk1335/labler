@@ -50,13 +50,16 @@ object SfntName {
         val nameOffset = tableOffset(bytes, base) ?: return null
         val records = nameRecords(bytes, nameOffset) ?: return null
 
-        val family = pick(bytes, records, ID_TYPOGRAPHIC_FAMILY)
-            ?: pick(bytes, records, ID_FAMILY)
-            ?: return null
-        val subfamily = pick(bytes, records, ID_TYPOGRAPHIC_SUBFAMILY)
-            ?: pick(bytes, records, ID_SUBFAMILY)
-            ?: ""
-        return Names(family, subfamily)
+        // The two naming schemes must be taken as a pair. Mixing them would combine the
+        // typographic family "Open Sans" with the legacy subfamily "Regular" on a file whose
+        // legacy pair reads "Open Sans Light" / "Regular", collapsing every weight of that
+        // family onto one key so only the first of them could ever be installed.
+        val typographic = pick(bytes, records, ID_TYPOGRAPHIC_FAMILY)?.let { family ->
+            pick(bytes, records, ID_TYPOGRAPHIC_SUBFAMILY)?.let { Names(family, it) }
+        }
+        return typographic ?: pick(bytes, records, ID_FAMILY)?.let { family ->
+            Names(family, pick(bytes, records, ID_SUBFAMILY) ?: "")
+        }
     }
 
     /** Start of the offset table: 0 for a plain font, the first entry for a "ttcf" collection. */

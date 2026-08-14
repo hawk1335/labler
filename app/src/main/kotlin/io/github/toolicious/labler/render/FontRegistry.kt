@@ -55,9 +55,6 @@ object FontRegistry {
         revision++
     }
 
-    /** Whether [family] is currently installed, used to spot a template's dangling reference. */
-    fun hasCustom(family: String): Boolean = custom.containsKey(family)
-
     /**
      * Typeface for a text element. An unresolvable [customFamily] falls back to the built-in
      * [font] rather than failing, which is what keeps a template readable while one of its

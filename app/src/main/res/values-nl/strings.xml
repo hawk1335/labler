@@ -165,6 +165,7 @@
     <string name="toast_fonts_added">%1$d lettertypen toegevoegd</string>
     <string name="toast_fonts_added_partial">%1$d van %2$d lettertypen toegevoegd</string>
     <string name="err_font_invalid">Geen geldig lettertypebestand</string>
+    <string name="err_font_too_large">Lettertypebestand is te groot (max. 32 MB)</string>
     <string name="err_font_duplicate">\"%1$s\" is al toegevoegd</string>
 
     <string name="settings_diagnostics">Diagnose</string>

@@ -43,6 +43,19 @@ class SfntNameTest {
     }
 
     @Test
+    fun `a typographic family without its subfamily falls back to the legacy pair`() {
+        // Weight-split families keep the legacy pair carrying the weight. Taking name ID 16 while
+        // reading the subfamily from ID 2 would collapse every weight onto plain "Open Sans", so
+        // only the first of them could ever be installed.
+        val bytes = font(
+            entry(1, "Open Sans Light"),
+            entry(2, "Regular"),
+            entry(16, "Open Sans"),
+        )
+        assertEquals("Open Sans Light", SfntName.read(bytes)?.identity)
+    }
+
+    @Test
     fun `windows english is preferred over other windows languages`() {
         val bytes = font(
             entry(1, "Schriftart", languageId = 0x0407),

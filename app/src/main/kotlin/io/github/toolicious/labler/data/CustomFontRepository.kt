@@ -56,6 +56,7 @@ class CustomFontRepository(
         data class Added(val font: CustomFont) : AddResult
         data class Duplicate(val family: String) : AddResult
         data object Invalid : AddResult
+        data object TooLarge : AddResult
         data object Failed : AddResult
     }
 
@@ -81,21 +82,44 @@ class CustomFontRepository(
     }
 
     private suspend fun load() = withContext(Dispatchers.IO) {
-        val stored = decode(settings.customFontsJson.first())
-        val present = stored.filter { File(dir, it.fileName).isFile }
-        if (present.size != stored.size) persist(present)
-        removeUnreferencedFiles(present)
-        publish(present)
-        _ready.value = true
+        try {
+            val stored = decode(settings.customFontsJson.first())
+            // publish drops whatever no longer loads, so the stored list is pruned to match.
+            publish(stored)
+            val usable = _fonts.value
+            if (usable.size != stored.size) persist(usable)
+            removeUnreferencedFiles(usable)
+        } finally {
+            // Even a failed read has to release the waiters, otherwise every mutation below would
+            // block forever and the editor would never report a missing font again.
+            _ready.value = true
+        }
+    }
+
+    /**
+     * Mutations read the current list, so they must not run against the empty placeholder while
+     * the stored one is still being read. Persisting from that placeholder would drop every font
+     * the user already had.
+     */
+    private suspend fun awaitLoaded() {
+        if (!_ready.value) ready.first { it }
     }
 
     suspend fun add(uri: Uri): AddResult = withContext(Dispatchers.IO) {
+        awaitLoaded()
         val bytes = readBytes(uri) ?: return@withContext AddResult.Failed
+        if (bytes.size > MAX_FILE_BYTES) return@withContext AddResult.TooLarge
         val family = SfntName.read(bytes)?.identity ?: return@withContext AddResult.Invalid
         if (_fonts.value.any { it.family == family }) return@withContext AddResult.Duplicate(family)
 
         val sourceName = pickedName(uri) ?: "$family.ttf"
         val file = writeCopy(bytes, extensionOf(sourceName)) ?: return@withContext AddResult.Failed
+        // A readable name table does not mean the glyph data is usable, and a font that cannot
+        // become a Typeface would sit in the list rendering as the fallback with no explanation.
+        if (typefaceOf(file) == null) {
+            file.delete()
+            return@withContext AddResult.Invalid
+        }
 
         val font = CustomFont(family = family, fileName = file.name, sourceName = sourceName)
         val next = _fonts.value + font
@@ -110,12 +134,18 @@ class CustomFontRepository(
      * otherwise lose their font.
      */
     suspend fun replaceFile(family: String, uri: Uri): AddResult = withContext(Dispatchers.IO) {
+        awaitLoaded()
         val existing = _fonts.value.find { it.family == family } ?: return@withContext AddResult.Failed
         val bytes = readBytes(uri) ?: return@withContext AddResult.Failed
+        if (bytes.size > MAX_FILE_BYTES) return@withContext AddResult.TooLarge
         SfntName.read(bytes) ?: return@withContext AddResult.Invalid
 
         val sourceName = pickedName(uri) ?: existing.sourceName
         val file = writeCopy(bytes, extensionOf(sourceName)) ?: return@withContext AddResult.Failed
+        if (typefaceOf(file) == null) {
+            file.delete()
+            return@withContext AddResult.Invalid
+        }
 
         val updated = existing.copy(fileName = file.name, sourceName = sourceName)
         val next = _fonts.value.map { if (it.family == family) updated else it }
@@ -127,6 +157,7 @@ class CustomFontRepository(
 
     /** An empty [displayName] restores the family name as the label. */
     suspend fun rename(family: String, displayName: String) = withContext(Dispatchers.IO) {
+        awaitLoaded()
         val next = _fonts.value.map {
             if (it.family == family) it.copy(displayName = displayName.trim()) else it
         }
@@ -139,6 +170,7 @@ class CustomFontRepository(
      * font, so adding the same font again makes them correct once more.
      */
     suspend fun remove(family: String) = withContext(Dispatchers.IO) {
+        awaitLoaded()
         val existing = _fonts.value.find { it.family == family } ?: return@withContext
         val next = _fonts.value.filterNot { it.family == family }
         persist(next)
@@ -148,13 +180,21 @@ class CustomFontRepository(
 
     private suspend fun publish(list: List<CustomFont>) {
         val sorted = list.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.label })
-        val loaded = sorted.mapNotNull { font ->
-            runCatching { Typeface.createFromFile(File(dir, font.fileName)) }
-                .getOrNull()?.let { font.family to it }
-        }.toMap()
+        val loaded = LinkedHashMap<String, Typeface>()
+        // A font that no longer loads is dropped from both, so the list the UI offers and the
+        // registry the renderer asks can never disagree. A template referencing it is then
+        // reported as missing rather than quietly rendering the fallback.
+        val usable = sorted.filter { font ->
+            val typeface = typefaceOf(File(dir, font.fileName))
+            if (typeface != null) loaded[font.family] = typeface
+            typeface != null
+        }
         withContext(Dispatchers.Main) { FontRegistry.setCustom(loaded) }
-        _fonts.value = sorted
+        _fonts.value = usable
     }
+
+    private fun typefaceOf(file: File): Typeface? =
+        runCatching { Typeface.createFromFile(file) }.getOrNull()
 
     private suspend fun persist(list: List<CustomFont>) {
         settings.saveCustomFonts(json.encodeToString(list))
@@ -171,8 +211,9 @@ class CustomFontRepository(
                 val read = stream.read(buffer)
                 if (read < 0) break
                 out.write(buffer, 0, read)
-                // Bounded so that picking a huge file by mistake cannot exhaust memory.
-                if (out.size() > MAX_FILE_BYTES) return@use null
+                // One byte past the cap is enough for the caller to report the file as too
+                // large, without pulling an arbitrarily big pick into memory.
+                if (out.size() > MAX_FILE_BYTES) break
             }
             out.toByteArray()
         }
@@ -208,7 +249,8 @@ class CustomFontRepository(
     }
 
     private companion object {
-        const val MAX_FILE_BYTES = 8 * 1024 * 1024
+        // Generous, because CJK families and .ttc collections routinely run past 16 MB.
+        const val MAX_FILE_BYTES = 32 * 1024 * 1024
         val FONT_EXTENSIONS = setOf("ttf", "otf", "ttc", "otc")
     }
 }

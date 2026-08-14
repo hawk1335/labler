@@ -165,6 +165,7 @@
     <string name="toast_fonts_added">Додано шрифтів: %1$d</string>
     <string name="toast_fonts_added_partial">Додано %1$d з %2$d шрифтів</string>
     <string name="err_font_invalid">Недійсний файл шрифту</string>
+    <string name="err_font_too_large">Файл шрифту завеликий (макс. 32 МБ)</string>
     <string name="err_font_duplicate">«%1$s» вже додано</string>
 
     <string name="settings_diagnostics">Діагностика</string>

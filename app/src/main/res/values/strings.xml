@@ -177,6 +177,7 @@
     <string name="toast_fonts_added">%1$d Schriften hinzugefügt</string>
     <string name="toast_fonts_added_partial">%1$d von %2$d Schriften hinzugefügt</string>
     <string name="err_font_invalid">Keine gültige Schriftdatei</string>
+    <string name="err_font_too_large">Schriftdatei ist zu groß (max. 32 MB)</string>
     <string name="err_font_duplicate">„%1$s“ ist bereits vorhanden</string>
 
     <string name="settings_diagnostics">Diagnose</string>

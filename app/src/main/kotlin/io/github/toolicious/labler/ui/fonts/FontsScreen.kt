@@ -33,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,7 +62,9 @@ fun FontsScreen(
 
     var renaming by remember { mutableStateOf<CustomFont?>(null) }
     var removing by remember { mutableStateOf<CustomFont?>(null) }
-    var replacing by remember { mutableStateOf<String?>(null) }
+    // Saveable, because it has to survive the activity being recreated behind the document
+    // picker; otherwise the picked file comes back with nothing to attach it to.
+    var replacing by rememberSaveable { mutableStateOf<String?>(null) }
 
     // Font MIME types are unreliable across document providers ("font/ttf", "application/x-font-ttf",
     // often just "application/octet-stream"), so a narrow filter would grey out valid files. Parsing
@@ -269,6 +272,7 @@ private fun Context.toastResults(results: List<AddResult>) {
             is AddResult.Added -> getString(R.string.toast_font_added, only.font.label)
             is AddResult.Duplicate -> getString(R.string.err_font_duplicate, only.family)
             AddResult.Invalid -> getString(R.string.err_font_invalid)
+            AddResult.TooLarge -> getString(R.string.err_font_too_large)
             AddResult.Failed -> getString(R.string.err_file_not_readable)
         }
 

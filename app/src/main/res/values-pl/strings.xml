@@ -165,6 +165,7 @@
     <string name="toast_fonts_added">Dodano czcionki: %1$d</string>
     <string name="toast_fonts_added_partial">Dodano %1$d z %2$d czcionek</string>
     <string name="err_font_invalid">Nieprawidłowy plik czcionki</string>
+    <string name="err_font_too_large">Plik czcionki jest za duży (maks. 32 MB)</string>
     <string name="err_font_duplicate">„%1$s” już istnieje</string>
 
     <string name="settings_diagnostics">Diagnostyka</string>

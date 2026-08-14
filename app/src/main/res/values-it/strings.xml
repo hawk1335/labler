@@ -165,6 +165,7 @@
     <string name="toast_fonts_added">%1$d caratteri aggiunti</string>
     <string name="toast_fonts_added_partial">%1$d di %2$d caratteri aggiunti</string>
     <string name="err_font_invalid">File del carattere non valido</string>
+    <string name="err_font_too_large">File del carattere troppo grande (max 32 MB)</string>
     <string name="err_font_duplicate">«%1$s» è già presente</string>
 
     <string name="settings_diagnostics">Diagnostica</string>

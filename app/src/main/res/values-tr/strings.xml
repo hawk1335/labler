@@ -165,6 +165,7 @@
     <string name="toast_fonts_added">%1$d yazı tipi eklendi</string>
     <string name="toast_fonts_added_partial">%2$d yazı tipinden %1$d tanesi eklendi</string>
     <string name="err_font_invalid">Geçerli bir yazı tipi dosyası değil</string>
+    <string name="err_font_too_large">Yazı tipi dosyası çok büyük (en fazla 32 MB)</string>
     <string name="err_font_duplicate">\"%1$s\" zaten ekli</string>
 
     <string name="settings_diagnostics">Tanılama</string>

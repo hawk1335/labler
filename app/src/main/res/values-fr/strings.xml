@@ -165,6 +165,7 @@
     <string name="toast_fonts_added">%1$d polices ajoutées</string>
     <string name="toast_fonts_added_partial">%1$d polices sur %2$d ajoutées</string>
     <string name="err_font_invalid">Fichier de police non valide</string>
+    <string name="err_font_too_large">Fichier de police trop volumineux (max. 32 Mo)</string>
     <string name="err_font_duplicate">« %1$s » est déjà ajoutée</string>
 
     <string name="settings_diagnostics">Diagnostic</string>
