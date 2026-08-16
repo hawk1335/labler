@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -70,6 +72,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -81,8 +84,10 @@ import io.github.toolicious.labler.render.FontRegistry
 import io.github.toolicious.labler.render.LabelRenderer
 import io.github.toolicious.labler.ui.components.ClearButton
 import io.github.toolicious.labler.ui.components.PrinterStatusChip
+import io.github.toolicious.labler.ui.components.rememberBlePermissionRunner
 import io.github.toolicious.labler.ui.components.rememberBlePermissionState
 import io.github.toolicious.labler.ui.info.InfoDialog
+import io.github.toolicious.labler.ui.print.TemplatePrintSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,10 +103,13 @@ fun HomeScreen(
     val printerState by vm.printerState.collectAsState()
     val savedPrinter by vm.savedPrinter.collectAsState()
     val blePermission = rememberBlePermissionState()
+    // Same gate the editor's print button uses: open the sheet only once Bluetooth is granted.
+    val withBlePermissions = rememberBlePermissionRunner()
     var showNewDialog by rememberSaveable { mutableStateOf(false) }
     var editTarget by remember { mutableStateOf<LabelTemplate?>(null) }
     var exportTarget by remember { mutableStateOf<LabelTemplate?>(null) }
     var deleteTarget by remember { mutableStateOf<LabelTemplate?>(null) }
+    var printTarget by remember { mutableStateOf<LabelTemplate?>(null) }
     // Default name locale-safe from the UI (Compose follows the current app language).
     val defaultLabelName = stringResource(R.string.default_label_name)
 
@@ -234,6 +242,7 @@ fun HomeScreen(
                             // Favorite re-sorting glides with animation (the grid reflows).
                             modifier = Modifier.animateItem(),
                             onClick = { onOpenTemplate(template.id) },
+                            onPrint = { withBlePermissions { printTarget = template } },
                             onToggleFavorite = { vm.toggleFavorite(template) },
                             onEdit = { editTarget = template },
                             onDuplicate = { vm.duplicate(template.id, copyName) },
@@ -251,6 +260,14 @@ fun HomeScreen(
 
     if (showInfoDialog) {
         InfoDialog(onDismiss = { showInfoDialog = false })
+    }
+
+    printTarget?.let { target ->
+        TemplatePrintSheet(
+            template = target,
+            onDismiss = { printTarget = null },
+            onOpenSettings = onOpenSettings,
+        )
     }
 
     if (showNewDialog) {
@@ -308,6 +325,7 @@ private fun TemplateCard(
     template: LabelTemplate,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    onPrint: () -> Unit,
     onToggleFavorite: () -> Unit,
     onEdit: () -> Unit,
     onDuplicate: () -> Unit,
@@ -317,13 +335,26 @@ private fun TemplateCard(
     var menuOpen by remember { mutableStateOf(false) }
 
     ElevatedCard(
-        onClick = onClick,
         modifier = modifier,
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
         )
     ) {
-        Column(Modifier.padding(10.dp)) {
+        // combinedClickable replaces the clickable ElevatedCard overload, which knows no long press.
+        // It sits on the content rather than on the card's own modifier: the card surface already
+        // clips its content, so the ripple stays inside the rounded corners without an extra clip
+        // that would cut off the drop shadow. Role and long-click label restore the semantics the
+        // clickable overload provided; the long-press haptic comes from combinedClickable itself.
+        Column(
+            Modifier
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = onPrint,
+                    onLongClickLabel = stringResource(R.string.action_print),
+                    role = Role.Button,
+                )
+                .padding(10.dp)
+        ) {
             // The revision is a key as well, so a thumbnail is re-rendered once a custom font
             // it references becomes available or is removed.
             val bitmap = remember(template.id, template.updatedAt, FontRegistry.revision) {
@@ -358,6 +389,12 @@ private fun TemplateCard(
                         Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.cd_menu))
                     }
                     DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                        // Accent-colored and first, because printing is the main action here;
+                        // the same entry the long press on the card triggers.
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.action_print)) },
+                            colors = MenuDefaults.itemColors(textColor = MaterialTheme.colorScheme.primary),
+                            onClick = { menuOpen = false; onPrint() })
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.menu_edit)) },
                             onClick = { menuOpen = false; onEdit() })

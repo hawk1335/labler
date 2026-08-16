@@ -55,7 +55,7 @@ import java.util.Locale
 
 /**
  * Print dialog for templates: resolves placeholders (with input fields for
- * {frage:...}), shows the pixel-accurate 1-bit preview of the first copy and
+ * {var:...}), shows the pixel-accurate 1-bit preview of the first copy and
  * updates counter and history after printing.
  */
 @OptIn(ExperimentalMaterial3Api::class)
