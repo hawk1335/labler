@@ -166,6 +166,10 @@ class PrinterManager(
         }
         if (!autoConnect) {
             showTransientError(lastError?.message ?: context.getString(R.string.err_connect_failed))
+            // connect() cancelled the background reconnect before trying actively, so restore it
+            // after a failure. Otherwise one failed tap leaves the app deaf to the printer
+            // returning. Cannot recurse: the retry it starts runs with autoConnect = true.
+            startBackgroundReconnect()
         }
         throw lastError ?: IllegalStateException(context.getString(R.string.err_connect_failed))
     }
@@ -207,6 +211,11 @@ class PrinterManager(
             } catch (t: Throwable) {
                 disconnectInternal()
                 showTransientError(t.message ?: context.getString(R.string.err_print_failed))
+                // Arm the reconnect here rather than leaving it to watchDisconnect: tearing the
+                // connection down above clears `connection`, so the watcher's identity check no
+                // longer matches (and gatt.close() usually suppresses its callback anyway).
+                // Without this the printer coming back on is only noticed on the next resume.
+                startBackgroundReconnect()
                 throw t
             }
         }
