@@ -234,7 +234,11 @@ class PrinterManager(
     private fun watchDisconnect(conn: PrinterConnection) {
         scope.launch {
             conn.client.connectionChanges.first { it.newState == BluetoothProfile.STATE_DISCONNECTED }
-            if (connection === conn && _state.value is PrinterState.Ready) {
+            // Printing counts as well: losing the link mid-job used to fall through here and
+            // leave the state stuck on "Printing" forever, because the job itself was already
+            // dead. The job's own error handling still runs and shows the message.
+            val st = _state.value
+            if (connection === conn && (st is PrinterState.Ready || st is PrinterState.Printing)) {
                 disconnectInternal()
                 _state.value = PrinterState.Disconnected
                 // Unexpected loss (printer switched off): wait for its return.

@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothStatusCodes
 import android.content.Context
 import android.os.Build
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -21,7 +22,23 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import java.io.IOException
 import java.util.UUID
+
+/**
+ * A GATT operation did not produce its callback in time (printer switched off, out of
+ * range, radio wedged).
+ *
+ * Deliberately NOT a CancellationException, unlike the TimeoutCancellationException that
+ * withTimeout throws: a timed-out radio operation is an I/O failure, and callers must be
+ * able to tell it apart from a coroutine that was genuinely cancelled. Handlers of the
+ * shape `catch (c: CancellationException) { throw c }` would otherwise swallow it and
+ * leave the caller hanging with no error at all.
+ *
+ * Carries no message on purpose, so callers fall back to their own localized text; the
+ * technical detail goes to the log instead of into the UI.
+ */
+class GattTimeoutException(cause: Throwable? = null) : IOException(null, cause)
 
 /**
  * Thin coroutine wrapper around BluetoothGatt. Android allows exactly one
@@ -85,11 +102,16 @@ class GattClient {
         crossinline filter: (E) -> Boolean = { true },
         crossinline initiate: () -> Boolean,
     ): E = opMutex.withLock {
-        withTimeout(timeoutMs) {
-            events
-                .onSubscription { check(initiate()) { "GATT operation could not be started" } }
-                .filterIsInstance<E>()
-                .first { filter(it) }
+        try {
+            withTimeout(timeoutMs) {
+                events
+                    .onSubscription { check(initiate()) { "GATT operation could not be started" } }
+                    .filterIsInstance<E>()
+                    .first { filter(it) }
+            }
+        } catch (e: TimeoutCancellationException) {
+            bleLog("GATT operation timed out after $timeoutMs ms waiting for ${E::class.simpleName}")
+            throw GattTimeoutException(e)
         }
     }
 
@@ -130,7 +152,18 @@ class GattClient {
                         }
                     }
             }
-            if (timeoutMs == null) await() else withTimeout(timeoutMs) { await() }
+            if (timeoutMs == null) {
+                await()
+            } else {
+                try {
+                    withTimeout(timeoutMs) { await() }
+                } catch (e: TimeoutCancellationException) {
+                    // As a CancellationException this would abort connectInternal's retry loop
+                    // instead of counting as one failed attempt.
+                    bleLog("connect timed out after $timeoutMs ms")
+                    throw GattTimeoutException(e)
+                }
+            }
         }
     }
 
@@ -146,7 +179,8 @@ class GattClient {
         return try {
             val ev = awaitEvent<GattEvent.MtuChanged>(timeoutMs) { g.requestMtu(mtu) }
             if (ev.status == BluetoothGatt.GATT_SUCCESS) ev.mtu else -1
-        } catch (_: kotlinx.coroutines.TimeoutCancellationException) {
+        } catch (_: GattTimeoutException) {
+            // A missing MTU negotiation is not fatal, the default MTU still works.
             -1
         }
     }

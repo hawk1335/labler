@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.toolicious.labler.App
+import io.github.toolicious.labler.R
 import io.github.toolicious.labler.model.LabelTemplate
 import io.github.toolicious.labler.model.Placeholders
 import io.github.toolicious.labler.printer.MediaType
@@ -81,7 +82,8 @@ class TemplatePrintViewModel(app: Application) : AndroidViewModel(app) {
             } catch (c: CancellationException) {
                 throw c
             } catch (t: Throwable) {
-                _error.value = t.message ?: "Print failed"
+                // A GATT timeout carries no message so that this localized text is used.
+                _error.value = t.message ?: getApplication<Application>().getString(R.string.err_print_failed)
             } finally {
                 _working.value = false
             }
