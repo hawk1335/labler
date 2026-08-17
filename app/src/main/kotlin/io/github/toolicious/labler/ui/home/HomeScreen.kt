@@ -75,6 +75,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.toolicious.labler.R
 import io.github.toolicious.labler.model.LabelSpec
@@ -467,6 +468,13 @@ internal fun LabelDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
+        // Wider than the platform default, which is narrow enough on a phone to break the size
+        // and tape-width chips onto extra rows. Material3 still caps the dialog at 560 dp, so
+        // this only widens it up to that, and the margin keeps it off the screen edges.
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        properties = DialogProperties(usePlatformDefaultWidth = false),
         title = { Text(title) },
         text = {
             Column {
