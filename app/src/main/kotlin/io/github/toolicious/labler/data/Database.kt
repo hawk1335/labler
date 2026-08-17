@@ -1,5 +1,6 @@
 package io.github.toolicious.labler.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Entity
@@ -19,6 +20,13 @@ data class TemplateEntity(
     val tapeWidthMm: Int,
     val lengthMm: Int,
     val media: String,
+    /**
+     * Continuous tape whose length follows the content; lengthMm is then the minimum.
+     * The default is declared here as well, so the exported schema matches what MIGRATION_2_3
+     * adds and Room's validation cannot trip over a differing default.
+     */
+    @ColumnInfo(defaultValue = "0")
+    val autoLength: Boolean = false,
     val elementsJson: String,
     val schemaVersion: Int,
     val favorite: Boolean,
@@ -111,9 +119,16 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
+/** Auto-length tape (issue #2). Existing templates keep their exact length, hence the 0 default. */
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `templates` ADD COLUMN `autoLength` INTEGER NOT NULL DEFAULT 0")
+    }
+}
+
 @Database(
     entities = [TemplateEntity::class, PrintHistoryEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {

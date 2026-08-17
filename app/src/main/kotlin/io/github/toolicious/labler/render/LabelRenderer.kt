@@ -27,14 +27,18 @@ import io.github.toolicious.labler.model.LabelTextAlign
 import io.github.toolicious.labler.model.Symbology
 import io.github.toolicious.labler.model.TextElement
 import io.github.toolicious.labler.printer.MonoImage
+import io.github.toolicious.labler.printer.Protocol
 import io.github.toolicious.labler.printer.dither.Contrast
 import io.github.toolicious.labler.printer.dither.Canny
 import io.github.toolicious.labler.printer.dither.DitherMode
 import io.github.toolicious.labler.printer.dither.OutlineMethod
 import io.github.toolicious.labler.printer.dither.Ditherer
 import io.github.toolicious.labler.printer.dither.Outline
+import kotlin.math.abs
 import kotlin.math.ceil
+import kotlin.math.cos
 import kotlin.math.round
+import kotlin.math.sin
 
 /**
  * Renders a label 1:1 at print resolution (lengthPx x 96, white background).
@@ -54,14 +58,67 @@ object LabelRenderer {
     // editor shows the real dots.
     private val nnPaint = Paint().apply { isAntiAlias = false; isFilterBitmap = false }
 
-    fun render(spec: LabelSpec, elements: List<LabelElement>): Bitmap {
-        val bmp = Bitmap.createBitmap(spec.lengthPx, LabelSpec.PRINT_HEIGHT_PX, Bitmap.Config.ARGB_8888)
+    /**
+     * Trailing margin on an auto-length label, mirroring the 8 px inset that new elements start
+     * at, so the content does not end flush with the cut edge.
+     */
+    const val AUTO_LENGTH_MARGIN_PX = 8f
+
+    /**
+     * Right edge of an element in label px. Elements are rotated around their own center
+     * (see [drawElementInto]), so a rotated one reaches further than its plain width.
+     */
+    private fun rightEdge(element: LabelElement): Float {
+        val size = measure(element)
+        if (element.rotation == 0) return element.x + size.width
+        val rad = Math.toRadians(element.rotation.toDouble())
+        val halfWidth = (abs(cos(rad)) * size.width + abs(sin(rad)) * size.height) / 2.0
+        return element.x + size.width / 2f + halfWidth.toFloat()
+    }
+
+    /**
+     * The length the label is actually rendered and printed at.
+     *
+     * A fixed label always uses its own length. An auto-length tape grows to hold its content
+     * but never falls below [LabelSpec.lengthMm], which acts as the minimum there. The result is
+     * rounded up to a whole millimetre, so the length shown to the user is exact rather than a
+     * fraction, and so a job stays on the dot grid.
+     */
+    fun effectiveLengthPx(spec: LabelSpec, elements: List<LabelElement>): Int {
+        if (!spec.lengthIsAuto) return spec.lengthPx
+        val content = elements.maxOfOrNull { rightEdge(it) } ?: 0f
+        val contentMm = ceil((content + AUTO_LENGTH_MARGIN_PX) / Protocol.DOTS_PER_MM).toInt()
+        // coerceAtMost rather than coerceIn, so an out-of-range minimum from hand-edited JSON
+        // caps out instead of throwing.
+        return maxOf(spec.lengthMm, contentMm)
+            .coerceAtMost(LabelSpec.MAX_LENGTH_MM) * Protocol.DOTS_PER_MM
+    }
+
+    /** [effectiveLengthPx] in whole millimetres, for the length shown in the UI. */
+    fun effectiveLengthMm(spec: LabelSpec, elements: List<LabelElement>): Int =
+        effectiveLengthPx(spec, elements) / Protocol.DOTS_PER_MM
+
+    /**
+     * @param lengthPx overrides the length instead of deriving it from [elements]. Needed when the
+     *   caller renders a subset (the editor omits the selected element and draws it on top), where
+     *   deriving would give a shorter label than the one the subset belongs to.
+     */
+    fun render(
+        spec: LabelSpec,
+        elements: List<LabelElement>,
+        lengthPx: Int = effectiveLengthPx(spec, elements),
+    ): Bitmap {
+        val bmp = Bitmap.createBitmap(lengthPx, LabelSpec.PRINT_HEIGHT_PX, Bitmap.Config.ARGB_8888)
         drawInto(Canvas(bmp), spec, elements)
         return bmp
     }
 
-    fun renderMono(spec: LabelSpec, elements: List<LabelElement>): MonoImage {
-        val bmp = render(spec, elements)
+    fun renderMono(
+        spec: LabelSpec,
+        elements: List<LabelElement>,
+        lengthPx: Int = effectiveLengthPx(spec, elements),
+    ): MonoImage {
+        val bmp = render(spec, elements, lengthPx)
         val mono = MonoConverter.convert(bmp)
         bmp.recycle()
         return mono

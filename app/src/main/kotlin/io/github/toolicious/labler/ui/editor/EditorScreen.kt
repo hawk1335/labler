@@ -238,7 +238,11 @@ fun EditorScreen(
             // top bar opens the same dialog, but a plain title does not look tappable, so the size
             // is set in the accent color to make the option visible at all.
             Text(
-                stringResource(R.string.template_size, t.spec.tapeWidthMm, t.spec.lengthMm),
+                if (t.spec.lengthIsAuto) {
+                    stringResource(R.string.template_size_auto, t.spec.tapeWidthMm)
+                } else {
+                    stringResource(R.string.template_size, t.spec.tapeWidthMm, t.spec.lengthMm)
+                },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
@@ -284,10 +288,13 @@ fun EditorScreen(
                             heightPx = h + 2 * pad
                         )
                     } else {
+                        // A frame spanning the whole label. On an auto-length tape "whole" can
+                        // only mean the length the content has right now; from then on the frame
+                        // itself is a fixed element and holds that length.
                         FrameElement(
                             id = id,
                             x = 2f, y = 2f,
-                            widthPx = (t.spec.lengthPx - 4).toFloat(),
+                            widthPx = (LabelRenderer.effectiveLengthPx(t.spec, t.elements) - 4).toFloat(),
                             heightPx = (LabelSpec.PRINT_HEIGHT_PX - 4).toFloat()
                         )
                     }

@@ -64,6 +64,9 @@ class TemplatePrintViewModel(app: Application) : AndroidViewModel(app) {
                     )
                 }
                 val reanchored = resolvedPerCopy.map { LabelRenderer.reanchor(template.elements, it) }
+                // renderMono derives the length from these resolved elements, so on an auto-length
+                // tape each copy gets exactly the length its own content needs. A counter rolling
+                // from 9 to 10 therefore makes that one copy longer, not all of them.
                 val images = reanchored.map { LabelRenderer.renderMono(template.spec, it) }
 
                 manager.printJobs(images, media)
@@ -71,10 +74,17 @@ class TemplatePrintViewModel(app: Application) : AndroidViewModel(app) {
                 if (hasCounter) {
                     templateRepo.setCounter(template.id, template.counterValue + copies)
                 }
+                val printedSpec = template.spec.copy(media = media)
                 historyRepo.record(
                     templateId = template.id,
                     templateName = template.name,
-                    spec = template.spec.copy(media = media),
+                    // A history entry is a snapshot of what actually came out, so it stores the
+                    // printed length instead of the minimum and drops the auto flag: reprinting it
+                    // must reproduce that label, not recompute a new length.
+                    spec = printedSpec.copy(
+                        lengthMm = LabelRenderer.effectiveLengthMm(printedSpec, reanchored.first()),
+                        autoLength = false,
+                    ),
                     resolvedElements = reanchored.first(),
                     copies = copies,
                 )

@@ -17,11 +17,34 @@ data class LabelSpec(
     val tapeWidthMm: Int = 12,
     val lengthMm: Int = 40,
     val media: MediaType = MediaType.DIE_CUT,
+    /**
+     * Continuous tape only: the label grows with its content, and [lengthMm] then acts as the
+     * minimum length instead of the exact one. Die-cut labels cannot do this, because their
+     * length is dictated by the physical gap the form feed advances to.
+     *
+     * Defaults to false so templates written before this existed keep their exact length.
+     */
+    val autoLength: Boolean = false,
 ) {
     val lengthPx: Int get() = lengthMm * Protocol.DOTS_PER_MM
 
+    /**
+     * Whether the length follows the content. Checks the media as well, so a die-cut spec that
+     * somehow carries the flag (hand-edited JSON, media switched later) still prints fixed.
+     */
+    val lengthIsAuto: Boolean get() = autoLength && media == MediaType.CONTINUOUS
+
     companion object {
         const val PRINT_HEIGHT_PX = Protocol.HEAD_DOTS
+
+        /** Bounds for a label length in mm, for the fixed value as well as an auto-grown one. */
+        const val MIN_LENGTH_MM = 10
+        const val MAX_LENGTH_MM = 500
+        const val MAX_LENGTH_PX = MAX_LENGTH_MM * Protocol.DOTS_PER_MM
+
+        /** Bounds for the tape width in mm. */
+        const val MIN_TAPE_MM = 10
+        const val MAX_TAPE_MM = 15
 
         /** Commercially available die-cut labels for P15/P12 (tape width x length in mm). */
         val PRESETS = listOf(
@@ -29,6 +52,9 @@ data class LabelSpec(
             14 to 30, 14 to 40,
             15 to 30, 15 to 40,
         )
+
+        /** Tape widths available as continuous cartridges, derived from the die-cut stock. */
+        val TAPE_WIDTHS = PRESETS.map { it.first }.distinct()
     }
 }
 

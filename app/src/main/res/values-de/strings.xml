@@ -36,6 +36,7 @@
     <string name="home_empty">Noch keine Labels.\nLege mit + dein erstes an.</string>
     <string name="home_no_results">Keine Treffer.</string>
     <string name="template_size">%1$d x %2$d mm</string>
+    <string name="template_size_auto">%1$d mm x variabel</string>
     <string name="menu_edit">Bearbeiten</string>
     <string name="menu_duplicate">Duplizieren</string>
     <string name="menu_export">Exportieren</string>
@@ -58,6 +59,12 @@
     <string name="field_length_mm">Länge (mm)</string>
     <string name="media_die_cut">Stanz-Etikett</string>
     <string name="media_continuous">Endlos</string>
+    <string name="field_media">Papier</string>
+    <string name="field_tape_width">Bandbreite (Höhe)</string>
+    <string name="field_length">Länge</string>
+    <string name="length_variable">Variabel</string>
+    <string name="length_fixed">Fest</string>
+    <string name="field_min_length_mm">Mindestlänge (mm)</string>
 
     <!-- Editor -->
     <string name="group_add">Hinzufügen</string>
@@ -135,6 +142,7 @@
     <!-- Druck-Dialog -->
     <string name="print_title">Drucken: %1$s</string>
     <string name="print_preview">Vorschau (%1$d mm, 1-Bit wie gedruckt):</string>
+    <string name="print_preview_auto">Vorschau (%1$d mm variabel, 1-Bit wie gedruckt):</string>
     <string name="print_paper">Papier:</string>
     <string name="print_copies">Kopien:</string>
     <string name="print_counter_start">Nr. startet bei %1$d</string>

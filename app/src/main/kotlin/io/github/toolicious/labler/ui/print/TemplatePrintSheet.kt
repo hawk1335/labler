@@ -79,7 +79,10 @@ fun TemplatePrintSheet(
 
     // The revision is a key too, because custom fonts load in the background and may only
     // become available after this sheet is already on screen.
-    val previewImage = remember(template, answers, FontRegistry.revision) {
+    // Resolved elements drive both the preview and its stated length: on an auto-length tape the
+    // length only becomes real once the placeholders carry their actual values, so this is where
+    // the user finally sees what will come out of the printer.
+    val resolvedElements = remember(template, answers, FontRegistry.revision) {
         val now = Date()
         val context = Placeholders.Context(
             dateText = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY).format(now),
@@ -87,8 +90,13 @@ fun TemplatePrintSheet(
             counter = template.counterValue,
             answers = answers,
         )
-        val resolved = Placeholders.resolve(template.elements, context)
-        LabelRenderer.renderMono(template.spec, LabelRenderer.reanchor(template.elements, resolved))
+        LabelRenderer.reanchor(template.elements, Placeholders.resolve(template.elements, context))
+    }
+    val previewImage = remember(resolvedElements) {
+        LabelRenderer.renderMono(template.spec, resolvedElements)
+    }
+    val previewLengthMm = remember(resolvedElements) {
+        LabelRenderer.effectiveLengthMm(template.spec, resolvedElements)
     }
     val previewBitmap = remember(previewImage) { MonoConverter.toBitmap(previewImage).asImageBitmap() }
 
@@ -132,7 +140,10 @@ fun TemplatePrintSheet(
             }
 
             Text(
-                stringResource(R.string.print_preview, template.spec.lengthMm),
+                stringResource(
+                    if (template.spec.lengthIsAuto) R.string.print_preview_auto else R.string.print_preview,
+                    previewLengthMm,
+                ),
                 style = MaterialTheme.typography.bodySmall
             )
             Spacer(Modifier.height(4.dp))

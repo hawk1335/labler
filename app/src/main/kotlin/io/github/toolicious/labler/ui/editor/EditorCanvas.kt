@@ -92,7 +92,10 @@ fun EditorCanvas(
     // frame can show that this move ignores the snap lines.
     var snapFreeDrag by remember { mutableStateOf(false) }
 
-    val labelW = spec.lengthPx.toFloat()
+    // On an auto-length tape the canvas is as long as its content (at least the minimum), so it
+    // grows while typing. The editor holds the unresolved placeholders, so this is the design
+    // length; the true printed length is shown in the print sheet, which resolves them.
+    val labelW = LabelRenderer.effectiveLengthPx(spec, elements).toFloat()
     val labelH = LabelSpec.PRINT_HEIGHT_PX.toFloat()
     // Fixed size (die-cut label) = rounded corners, continuous = hard corners.
     val isDieCut = spec.media == MediaType.DIE_CUT
@@ -112,8 +115,11 @@ fun EditorCanvas(
     val others = elements.filter { it.id != selectedId }
     // The revision is a key as well: custom fonts finish loading after startup, and this raster
     // would otherwise keep showing the fallback until the element set happens to change.
-    val base = remember(spec, others, FontRegistry.revision) {
-        MonoConverter.toBitmap(LabelRenderer.renderMono(spec, others))
+    // The length is pinned to the canvas: `others` omits the selected element, so letting the
+    // renderer derive it would give a shorter raster than the canvas whenever the selected element
+    // is the one defining the length, and it would then be drawn stretched.
+    val base = remember(spec, others, labelW, FontRegistry.revision) {
+        MonoConverter.toBitmap(LabelRenderer.renderMono(spec, others, labelW.toInt()))
     }
     // Nearest neighbor while magnifying (the normal case) shows the real dot pattern. A label may be
     // up to 500 mm = 4000 dots long and then no longer fits the canvas width; when shrinking, nearest

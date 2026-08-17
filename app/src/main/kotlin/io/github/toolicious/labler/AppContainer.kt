@@ -8,6 +8,7 @@ import io.github.toolicious.labler.data.BackupRepository
 import io.github.toolicious.labler.data.CustomFontRepository
 import io.github.toolicious.labler.data.HistoryRepository
 import io.github.toolicious.labler.data.MIGRATION_1_2
+import io.github.toolicious.labler.data.MIGRATION_2_3
 import io.github.toolicious.labler.data.SettingsRepository
 import io.github.toolicious.labler.data.TemplateJson
 import io.github.toolicious.labler.data.TemplateRepository
@@ -31,7 +32,7 @@ class AppContainer(context: Context) {
     }
 
     private val database = Room.databaseBuilder(context, AppDatabase::class.java, "labler.db")
-        .addMigrations(MIGRATION_1_2)
+        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
         .build()
 
     val settings = SettingsRepository(context)

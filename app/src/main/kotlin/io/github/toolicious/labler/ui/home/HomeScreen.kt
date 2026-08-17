@@ -360,6 +360,11 @@ private fun TemplateCard(
             val bitmap = remember(template.id, template.updatedAt, FontRegistry.revision) {
                 LabelRenderer.render(template.spec, template.elements).asImageBitmap()
             }
+            // An auto-length label is as long as its content, so the thumbnail cannot use the
+            // stored length for its aspect ratio.
+            val lengthPx = remember(template.id, template.updatedAt, FontRegistry.revision) {
+                LabelRenderer.effectiveLengthPx(template.spec, template.elements)
+            }
             // Fixed size (die-cut label) = rounded corners, continuous = hard corners.
             val labelShape = if (template.spec.media == MediaType.DIE_CUT) {
                 RoundedCornerShape(6.dp)
@@ -371,7 +376,7 @@ private fun TemplateCard(
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(template.spec.lengthPx.toFloat() / LabelSpec.PRINT_HEIGHT_PX)
+                    .aspectRatio(lengthPx.toFloat() / LabelSpec.PRINT_HEIGHT_PX)
                     .clip(labelShape)
                     .border(1.dp, MaterialTheme.colorScheme.outlineVariant, labelShape),
                 contentScale = ContentScale.FillBounds
@@ -413,7 +418,11 @@ private fun TemplateCard(
             // Dimensions on the left, favorite star in the bottom-right corner (there is free space there).
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    stringResource(R.string.template_size, template.spec.tapeWidthMm, template.spec.lengthMm),
+                    if (template.spec.lengthIsAuto) {
+                        stringResource(R.string.template_size_auto, template.spec.tapeWidthMm)
+                    } else {
+                        stringResource(R.string.template_size, template.spec.tapeWidthMm, template.spec.lengthMm)
+                    },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f)
@@ -442,14 +451,19 @@ internal fun LabelDialog(
     onImport: (() -> Unit)?,
     autofocusName: Boolean = false,
 ) {
-    val isPreset = LabelSpec.PRESETS.any { it.first == initialSpec.tapeWidthMm && it.second == initialSpec.lengthMm }
+    val isPresetSize = LabelSpec.PRESETS.any { it.first == initialSpec.tapeWidthMm && it.second == initialSpec.lengthMm }
     var name by rememberSaveable(initialName) { mutableStateOf(initialName) }
     val nameFocus = remember { FocusRequester() }
     LaunchedEffect(Unit) { if (autofocusName) nameFocus.requestFocus() }
-    var custom by rememberSaveable(initialSpec) { mutableStateOf(!isPreset) }
+    // Two separate "custom" flags: die-cut picks a whole stock size, continuous only a width.
+    var customSize by rememberSaveable(initialSpec) { mutableStateOf(!isPresetSize) }
+    var customWidth by rememberSaveable(initialSpec) {
+        mutableStateOf(initialSpec.tapeWidthMm !in LabelSpec.TAPE_WIDTHS)
+    }
     var widthText by rememberSaveable(initialSpec) { mutableStateOf(initialSpec.tapeWidthMm.toString()) }
     var lengthText by rememberSaveable(initialSpec) { mutableStateOf(initialSpec.lengthMm.toString()) }
     var dieCut by rememberSaveable(initialSpec) { mutableStateOf(initialSpec.media == MediaType.DIE_CUT) }
+    var autoLength by rememberSaveable(initialSpec) { mutableStateOf(initialSpec.lengthIsAuto) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -467,49 +481,11 @@ internal fun LabelDialog(
                     trailingIcon = { if (name.isNotEmpty()) ClearButton { name = "" } }
                 )
                 Spacer(Modifier.height(12.dp))
-                Text(stringResource(R.string.size_hint), style = MaterialTheme.typography.bodySmall)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    LabelSpec.PRESETS.forEach { (w, l) ->
-                        FilterChip(
-                            selected = !custom && widthText == "$w" && lengthText == "$l",
-                            onClick = {
-                                custom = false
-                                widthText = "$w"
-                                lengthText = "$l"
-                            },
-                            label = { Text("${w}x$l", maxLines = 1, softWrap = false) }
-                        )
-                    }
-                    FilterChip(
-                        selected = custom,
-                        onClick = { custom = true },
-                        label = { Text(stringResource(R.string.preset_custom), maxLines = 1, softWrap = false) }
-                    )
-                }
-                if (custom || !dieCut) {
-                    Spacer(Modifier.height(8.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (custom) {
-                            OutlinedTextField(
-                                value = widthText,
-                                onValueChange = { widthText = it.filter(Char::isDigit).take(2) },
-                                label = { Text(stringResource(R.string.field_tape_mm)) },
-                                singleLine = true,
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        OutlinedTextField(
-                            value = lengthText,
-                            onValueChange = { lengthText = it.filter(Char::isDigit).take(3) },
-                            label = { Text(stringResource(R.string.field_length_mm)) },
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
-                Spacer(Modifier.height(8.dp))
+
+                // The paper comes first, because it decides what the rest of the dialog means:
+                // a die-cut label takes both dimensions from the stock in the printer, while
+                // continuous tape only fixes the width and leaves the length to the design.
+                Text(stringResource(R.string.field_media), style = MaterialTheme.typography.bodySmall)
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     FilterChip(
                         selected = dieCut,
@@ -518,18 +494,127 @@ internal fun LabelDialog(
                     )
                     FilterChip(
                         selected = !dieCut,
-                        onClick = { dieCut = false },
+                        onClick = {
+                            // Switching over defaults to a variable length, because that is what
+                            // continuous tape is for. An already-continuous label keeps its choice.
+                            if (dieCut) {
+                                dieCut = false
+                                autoLength = true
+                            }
+                        },
                         label = { Text(stringResource(R.string.media_continuous), maxLines = 1, softWrap = false) }
+                    )
+                }
+                Spacer(Modifier.height(12.dp))
+
+                if (dieCut) {
+                    // Stock sizes: these presets are commercially available die-cut labels, so
+                    // they only make sense here.
+                    Text(stringResource(R.string.size_hint), style = MaterialTheme.typography.bodySmall)
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        LabelSpec.PRESETS.forEach { (w, l) ->
+                            FilterChip(
+                                selected = !customSize && widthText == "$w" && lengthText == "$l",
+                                onClick = {
+                                    customSize = false
+                                    widthText = "$w"
+                                    lengthText = "$l"
+                                },
+                                label = { Text("${w}x$l", maxLines = 1, softWrap = false) }
+                            )
+                        }
+                        FilterChip(
+                            selected = customSize,
+                            onClick = { customSize = true },
+                            label = { Text(stringResource(R.string.preset_custom), maxLines = 1, softWrap = false) }
+                        )
+                    }
+                    if (customSize) {
+                        Spacer(Modifier.height(8.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            MmField(
+                                value = widthText,
+                                onValueChange = { widthText = it },
+                                label = stringResource(R.string.field_tape_mm),
+                                maxDigits = 2,
+                                modifier = Modifier.weight(1f),
+                            )
+                            MmField(
+                                value = lengthText,
+                                onValueChange = { lengthText = it },
+                                label = stringResource(R.string.field_length_mm),
+                                maxDigits = 3,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                    }
+                } else {
+                    // Continuous tape: the width is the cartridge, the length is a design choice.
+                    Text(stringResource(R.string.field_tape_width), style = MaterialTheme.typography.bodySmall)
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        LabelSpec.TAPE_WIDTHS.forEach { w ->
+                            FilterChip(
+                                selected = !customWidth && widthText == "$w",
+                                onClick = {
+                                    customWidth = false
+                                    widthText = "$w"
+                                },
+                                label = { Text("$w mm", maxLines = 1, softWrap = false) }
+                            )
+                        }
+                        FilterChip(
+                            selected = customWidth,
+                            onClick = { customWidth = true },
+                            label = { Text(stringResource(R.string.preset_custom), maxLines = 1, softWrap = false) }
+                        )
+                    }
+                    if (customWidth) {
+                        Spacer(Modifier.height(8.dp))
+                        MmField(
+                            value = widthText,
+                            onValueChange = { widthText = it },
+                            label = stringResource(R.string.field_tape_mm),
+                            maxDigits = 2,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+                    Spacer(Modifier.height(12.dp))
+                    Text(stringResource(R.string.field_length), style = MaterialTheme.typography.bodySmall)
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        FilterChip(
+                            selected = autoLength,
+                            onClick = { autoLength = true },
+                            label = { Text(stringResource(R.string.length_variable), maxLines = 1, softWrap = false) }
+                        )
+                        FilterChip(
+                            selected = !autoLength,
+                            onClick = { autoLength = false },
+                            label = { Text(stringResource(R.string.length_fixed), maxLines = 1, softWrap = false) }
+                        )
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    // One field either way; only its meaning changes, from exact to lower bound.
+                    MmField(
+                        value = lengthText,
+                        onValueChange = { lengthText = it },
+                        label = stringResource(
+                            if (autoLength) R.string.field_min_length_mm else R.string.field_length_mm
+                        ),
+                        maxDigits = 3,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }
         },
         confirmButton = {
             val submit = {
-                val width = widthText.toIntOrNull()?.coerceIn(10, 15) ?: 12
-                val length = lengthText.toIntOrNull()?.coerceIn(10, 500) ?: 40
+                val width = widthText.toIntOrNull()
+                    ?.coerceIn(LabelSpec.MIN_TAPE_MM, LabelSpec.MAX_TAPE_MM) ?: 12
+                val length = lengthText.toIntOrNull()
+                    ?.coerceIn(LabelSpec.MIN_LENGTH_MM, LabelSpec.MAX_LENGTH_MM) ?: 40
                 val media = if (dieCut) MediaType.DIE_CUT else MediaType.CONTINUOUS
-                onConfirm(name, LabelSpec(width, length, media))
+                // Never store the flag on a die-cut label, its length belongs to the stock.
+                onConfirm(name, LabelSpec(width, length, media, autoLength = !dieCut && autoLength))
             }
             if (onImport != null) {
                 Row(
@@ -552,5 +637,24 @@ internal fun LabelDialog(
                 Button(onClick = submit) { Text(stringResource(R.string.action_save)) }
             }
         }
+    )
+}
+
+/** Numeric millimetre field of the label dialog (digits only, capped length). */
+@Composable
+private fun MmField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    maxDigits: Int,
+    modifier: Modifier = Modifier,
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { onValueChange(it.filter(Char::isDigit).take(maxDigits)) },
+        label = { Text(label) },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        modifier = modifier,
     )
 }
