@@ -36,7 +36,9 @@
     <string name="home_empty">No labels yet.\nTap + to create your first.</string>
     <string name="home_no_results">No matches.</string>
     <string name="template_size">%1$d x %2$d mm</string>
-    <string name="template_size_auto">%1$d mm x variable</string>
+    <!-- Overview card: deliberately language-neutral and short, so it stays on one line next to
+         the favourite star in a narrow grid cell. Not translated on purpose. -->
+    <string name="template_size_auto">%1$d x var:%2$d mm</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_duplicate">Duplicate</string>
     <string name="menu_export">Export</string>

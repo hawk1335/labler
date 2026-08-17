@@ -81,6 +81,7 @@ import io.github.toolicious.labler.R
 import io.github.toolicious.labler.model.LabelSpec
 import io.github.toolicious.labler.model.LabelTemplate
 import io.github.toolicious.labler.printer.MediaType
+import io.github.toolicious.labler.printer.Protocol
 import io.github.toolicious.labler.render.FontRegistry
 import io.github.toolicious.labler.render.LabelRenderer
 import io.github.toolicious.labler.ui.components.ClearButton
@@ -420,12 +421,18 @@ private fun TemplateCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     if (template.spec.lengthIsAuto) {
-                        stringResource(R.string.template_size_auto, template.spec.tapeWidthMm)
+                        // Reuses the length already measured for the aspect ratio above.
+                        stringResource(
+                            R.string.template_size_auto,
+                            template.spec.tapeWidthMm,
+                            lengthPx / Protocol.DOTS_PER_MM,
+                        )
                     } else {
                         stringResource(R.string.template_size, template.spec.tapeWidthMm, template.spec.lengthMm)
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(onClick = onToggleFavorite, modifier = Modifier.width(32.dp)) {

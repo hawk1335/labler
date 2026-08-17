@@ -100,6 +100,7 @@ import io.github.toolicious.labler.model.Symbology
 import io.github.toolicious.labler.model.TextElement
 import io.github.toolicious.labler.printer.dither.DitherMode
 import io.github.toolicious.labler.printer.dither.OutlineMethod
+import io.github.toolicious.labler.render.FontRegistry
 import io.github.toolicious.labler.render.LabelRenderer
 import io.github.toolicious.labler.ui.components.ClearButton
 import io.github.toolicious.labler.ui.components.labelFontFamily
@@ -237,9 +238,15 @@ fun EditorScreen(
             // The size doubles as the entry point to the label dialog (name + size). The title in the
             // top bar opens the same dialog, but a plain title does not look tappable, so the size
             // is set in the accent color to make the option visible at all.
+            // On a variable label the length only exists as a result, so it is shown live next to
+            // the setting. Remembered because measuring every element is not free and this recomposes
+            // on each edit. It is the design length: placeholders resolve only in the print sheet.
+            val autoLengthMm = remember(t.spec, t.elements, FontRegistry.revision) {
+                if (t.spec.lengthIsAuto) LabelRenderer.effectiveLengthMm(t.spec, t.elements) else 0
+            }
             Text(
                 if (t.spec.lengthIsAuto) {
-                    stringResource(R.string.template_size_auto, t.spec.tapeWidthMm)
+                    stringResource(R.string.template_size_auto, t.spec.tapeWidthMm, autoLengthMm)
                 } else {
                     stringResource(R.string.template_size, t.spec.tapeWidthMm, t.spec.lengthMm)
                 },

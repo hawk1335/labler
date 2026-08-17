@@ -36,7 +36,6 @@
     <string name="home_empty">Noch keine Labels.\nLege mit + dein erstes an.</string>
     <string name="home_no_results">Keine Treffer.</string>
     <string name="template_size">%1$d x %2$d mm</string>
-    <string name="template_size_auto">%1$d mm x variabel</string>
     <string name="menu_edit">Bearbeiten</string>
     <string name="menu_duplicate">Duplizieren</string>
     <string name="menu_export">Exportieren</string>
