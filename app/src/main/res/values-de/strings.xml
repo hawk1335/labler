@@ -57,7 +57,7 @@
     <string name="preset_custom">Eigene …</string>
     <string name="field_tape_mm">Band (mm)</string>
     <string name="field_length_mm">Länge (mm)</string>
-    <string name="media_die_cut">Stanz-Etikett</string>
+    <string name="media_die_cut">Einzeletikett</string>
     <string name="media_continuous">Endlos</string>
     <string name="field_media">Papier</string>
     <string name="field_tape_width">Bandbreite (Höhe)</string>
